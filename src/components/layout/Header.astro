@@ -1,0 +1,444 @@
+---
+// src/components/layout/Header.astro
+
+// Get current page for active navigation state
+const currentPath = Astro.url.pathname;
+
+// Helper function to check if nav item is active
+function isActive(path: string): boolean {
+    if (path === '/' && currentPath === '/') return true;
+    if (path !== '/' && currentPath.startsWith(path)) return true;
+    return false;
+}
+---
+
+<header class="header">
+    <!-- Mobile Menu Toggle -->
+    <div class="mobile-header">
+        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+        </button>
+        <span class="mobile-logo">Shoaib</span>
+    </div>
+
+    <div class="search-container">
+        <div class="search-wrapper">
+            <input
+                    type="text"
+                    class="search-input"
+                    placeholder="Search posts..."
+                    id="search-input"
+            >
+            <button class="search-btn" id="search-btn">Go</button>
+        </div>
+    </div>
+
+    <nav class="header-nav">
+        <a
+                href="/notes"
+                class={`nav-item ${isActive('/notes') ? 'active' : ''}`}
+        >
+            <span>📝</span>
+            Notes
+        </a>
+        <a
+                href="/blog"
+                class={`nav-item ${isActive('/blog') ? 'active' : ''}`}
+        >
+            <span>📰</span>
+            Blog
+        </a>
+        <a
+                href="/projects"
+                class={`nav-item ${isActive('/projects') ? 'active' : ''}`}
+        >
+            <span>🚀</span>
+            Projects
+        </a>
+        <a
+                href="/about"
+                class={`nav-item ${isActive('/about') ? 'active' : ''}`}
+        >
+            <span>👤</span>
+            About
+        </a>
+
+        <!-- Theme Toggle -->
+        <button class="theme-toggle" id="theme-toggle">
+            <span id="theme-icon">☀️</span>
+        </button>
+
+        <!-- Social Links -->
+        <a
+                href="https://github.com/shoaibyte"
+                class="nav-item social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+        >
+            <span>🐙</span>
+        </a>
+        <a
+                href="https://x.com/ShoaibHasan1806"
+                class="nav-item social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+        >
+            <span>🐦</span>
+        </a>
+    </nav>
+</header>
+
+<style>
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--space-12);
+        padding-bottom: var(--space-6);
+        border-bottom: 1px solid var(--color-border);
+        gap: var(--space-4);
+    }
+
+    .mobile-header {
+        display: none;
+        align-items: center;
+        gap: var(--space-3);
+    }
+
+    .mobile-logo {
+        font-size: 1.125rem;  /* Use direct value instead of var(--text-lg) */
+        font-weight: 700;
+        color: var(--color-primary);
+    }
+
+    .mobile-menu-toggle {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        background: transparent;
+        border: none;
+        padding: var(--space-2);
+        cursor: pointer;
+        border-radius: var(--radius-md);
+    }
+
+    .hamburger-line {
+        width: 24px;
+        height: 3px;
+        background: var(--color-text);
+        border-radius: 2px;
+        transition: all var(--transition-fast);
+    }
+
+    .search-container {
+        flex: 1;
+        max-width: 400px;
+    }
+
+    .search-wrapper {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        position: relative;
+    }
+
+    .search-input {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.875rem;  /* Use direct value */
+        color: var(--color-text);
+        width: 100%;
+        transition: all var(--transition-fast);
+        font-family: inherit;
+    }
+
+    .search-input::placeholder {
+        color: var(--color-text-secondary);
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(232, 121, 249, 0.1);
+    }
+
+    .search-btn {
+        background: var(--color-primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-md);
+        padding: var(--space-3) var(--space-4);
+        font-size: 0.875rem;  /* Use direct value */
+        font-weight: 500;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        font-family: inherit;
+        white-space: nowrap;
+    }
+
+    .search-btn:hover {
+        background: var(--color-primary-dark);
+        transform: translateY(-1px);
+    }
+
+    .search-btn:active {
+        transform: translateY(0);
+    }
+
+    .header-nav {
+        display: flex;
+        align-items: center;
+        gap: var(--space-6);
+        flex-shrink: 0;
+    }
+
+    .nav-item {
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;  /* Use direct value */
+        font-weight: 500;
+        transition: all var(--transition-fast);
+        padding: var(--space-2) var(--space-3);
+        border-radius: var(--radius-md);
+        white-space: nowrap;
+    }
+
+    .nav-item:hover {
+        color: var(--color-text);
+        background: var(--color-bg-secondary);
+    }
+
+    .nav-item.active {
+        color: var(--color-primary);
+        background: rgba(232, 121, 249, 0.1);
+    }
+
+    .nav-item span {
+        font-size: 1rem;
+    }
+
+    .social-link {
+        padding: var(--space-2);
+        min-width: auto;
+    }
+
+    .social-link span {
+        font-size: 1.125rem;
+    }
+
+    .theme-toggle {
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+        padding: var(--space-2);
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+    }
+
+    .theme-toggle:hover {
+        background: var(--color-bg-tertiary);
+        transform: translateY(-1px);
+    }
+
+    .theme-toggle:active {
+        transform: translateY(0);
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(1) {
+        transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+    }
+
+    .mobile-menu-toggle.active .hamburger-line:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+        .mobile-header {
+            display: flex;
+        }
+
+        .search-container {
+            order: 2;
+        }
+
+        .header-nav {
+            order: 3;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .header {
+            flex-direction: column;
+            gap: var(--space-4);
+            align-items: stretch;
+        }
+
+        .search-container {
+            max-width: none;
+        }
+
+        .header-nav {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: var(--space-4);
+        }
+
+        .nav-item {
+            font-size: 0.8rem;
+            gap: var(--space-1);
+        }
+
+        .search-wrapper {
+            justify-content: center;
+        }
+
+        .search-input {
+            min-width: 200px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .header-nav {
+            gap: var(--space-3);
+        }
+
+        .nav-item {
+            padding: var(--space-1) var(--space-2);
+        }
+
+        .search-wrapper {
+            flex-direction: column;
+            gap: var(--space-2);
+        }
+
+        .search-btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<script>
+    // Search functionality
+    function initializeSearch() {
+        const searchInput = document.getElementById('search-input') as HTMLInputElement;
+        const searchBtn = document.getElementById('search-btn') as HTMLButtonElement;
+
+        if (!searchInput || !searchBtn) return;
+
+        function performSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                // For now, redirect to a search page or implement search logic
+                console.log('Searching for:', query);
+                // You can implement search functionality here
+                // window.location.href = `/search?q=${encodeURIComponent(query)}`;
+
+                // Simple client-side search feedback
+                searchBtn.textContent = 'Searching...';
+                setTimeout(() => {
+                    searchBtn.textContent = 'Go';
+                    alert(`Search functionality coming soon! You searched for: "${query}"`);
+                }, 500);
+            }
+        }
+
+        // Search on button click
+        searchBtn.addEventListener('click', performSearch);
+
+        // Search on Enter key
+        searchInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+
+        // Clear search on Escape
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                searchInput.value = '';
+                searchInput.blur();
+            }
+        });
+    }
+
+    // Theme toggle functionality
+    function initializeThemeToggle() {
+        const themeToggle = document.getElementById('theme-toggle') as HTMLButtonElement;
+        const themeIcon = document.getElementById('theme-icon') as HTMLSpanElement;
+
+        if (!themeToggle || !themeIcon) return;
+
+        function updateThemeIcon() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Set initial icon
+        updateThemeIcon();
+
+        themeToggle.addEventListener('click', () => {
+            // Call the global toggleTheme function from Layout.astro
+            if (typeof (window as any).toggleTheme === 'function') {
+                (window as any).toggleTheme();
+                updateThemeIcon();
+            }
+        });
+    }
+
+    // Navigation active state handling
+    function initializeNavigation() {
+        const navItems = document.querySelectorAll('.nav-item:not(.social-link)');
+        const currentPath = window.location.pathname;
+
+        navItems.forEach(item => {
+            const link = item as HTMLAnchorElement;
+            const href = link.getAttribute('href');
+
+            if (href) {
+                // Remove existing active class
+                link.classList.remove('active');
+
+                // Add active class based on current path
+                if (href === '/' && currentPath === '/') {
+                    link.classList.add('active');
+                } else if (href !== '/' && currentPath.startsWith(href)) {
+                    link.classList.add('active');
+                }
+            }
+        });
+    }
+
+    // Initialize all functionality when DOM is loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeSearch();
+        initializeThemeToggle();
+        initializeNavigation();
+    });
+
+    // Re-initialize theme icon on theme change
+    document.addEventListener('astro:page-load', () => {
+        initializeSearch();
+        initializeThemeToggle();
+        initializeNavigation();
+    });
+</script>

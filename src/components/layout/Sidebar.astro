@@ -1,0 +1,187 @@
+---
+// src/components/layout/Sidebar.astro
+---
+
+<aside class="sidebar">
+    <!-- About Me Section -->
+    <div class="sidebar-section">
+        <h2 class="sidebar-title">About Me</h2>
+        <div class="sidebar-content">
+            I'm <strong>Shoaib</strong>, software engineer and open-source creator. This is my digital garden. 🌱
+        </div>
+    </div>
+
+    <!-- Stay Connected Section -->
+    <div class="sidebar-section">
+        <h2 class="sidebar-title">Stay Connected</h2>
+        <ul class="sidebar-links">
+            <li><a href="/newsletter" class="sidebar-link">
+                <span class="sidebar-icon">📧</span>
+                Email Newsletter
+            </a></li>
+            <li><a href="https://twitter.com/shoaib" class="sidebar-link" target="_blank">
+                <span class="sidebar-icon">🐦</span>
+                Twitter Updates
+            </a></li>
+            <li><a href="/rss.xml" class="sidebar-link">
+                <span class="sidebar-icon">📰</span>
+                RSS Feed
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Guides Section -->
+    <div class="sidebar-section">
+        <h2 class="sidebar-title">Guides</h2>
+        <ul class="sidebar-links">
+            <li><a href="/guides/react-setup" class="sidebar-link">
+                <span class="sidebar-icon">⚛️</span>
+                React Setup Guide
+            </a></li>
+            <li><a href="/guides/css" class="sidebar-link">
+                <span class="sidebar-icon">📘</span>
+                CSS Guidebook
+            </a></li>
+            <li><a href="/guides/architecture" class="sidebar-link">
+                <span class="sidebar-icon">🏗️</span>
+                System Architecture
+            </a></li>
+            <li><a href="/guides/api-design" class="sidebar-link">
+                <span class="sidebar-icon">🔄</span>
+                API Design Patterns
+            </a></li>
+            <li><a href="/guides/performance" class="sidebar-link">
+                <span class="sidebar-icon">⚡</span>
+                Performance Scripts
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Fun Stuff Section -->
+    <div class="sidebar-section">
+        <h2 class="sidebar-title">Fun Stuff</h2>
+        <ul class="sidebar-links">
+            <li><a href="/projects/game-dev" class="sidebar-link">
+                <span class="sidebar-icon">🎮</span>
+                Game Development
+            </a></li>
+            <li><a href="/projects/setup" class="sidebar-link">
+                <span class="sidebar-icon">💻</span>
+                Building My Setup
+            </a></li>
+            <li><a href="/blog/year-in-review-2024" class="sidebar-link">
+                <span class="sidebar-icon">📅</span>
+                Year in Review 2024
+            </a></li>
+        </ul>
+    </div>
+
+    <!-- Project Writeups Section -->
+    <div class="sidebar-section">
+        <h2 class="sidebar-title">Project Writeups</h2>
+        <ul class="sidebar-links">
+            <li><a href="/projects/keyboard-app" class="sidebar-link">
+                <span class="sidebar-icon">⌨️</span>
+                Custom Keyboard App
+            </a></li>
+            <li><a href="/projects/task-manager" class="sidebar-link">
+                <span class="sidebar-icon">🎯</span>
+                Task Management Tool
+            </a></li>
+            <li><a href="/projects/weather-app" class="sidebar-link">
+                <span class="sidebar-icon">📱</span>
+                Mobile Weather App
+            </a></li>
+            <li><a href="/projects/portfolio" class="sidebar-link">
+                <span class="sidebar-icon">🚀</span>
+                Portfolio Website
+            </a></li>
+        </ul>
+    </div>
+</aside>
+
+<style>
+    .sidebar {
+        background: var(--color-bg-secondary);
+        border-right: 1px solid var(--color-border);
+        padding: var(--space-6);
+        overflow-y: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100vh;
+    }
+
+    .sidebar-section {
+        margin-bottom: var(--space-8);
+    }
+
+    .sidebar-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--color-text);
+        margin-bottom: var(--space-4);
+        display: flex;
+        align-items: center;
+        gap: var(--space-2);
+    }
+
+    .sidebar-content {
+        color: var(--color-text-secondary);
+        font-size: 0.875rem;
+        line-height: 1.6;
+    }
+
+    .sidebar-links {
+        list-style: none;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: var(--space-3);
+        padding: var(--space-2) var(--space-3);
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        border-radius: var(--radius-md);
+        font-size: 0.875rem;
+        transition: all var(--transition-fast);
+        margin-bottom: var(--space-1);
+    }
+
+    .sidebar-link:hover {
+        background: var(--color-bg-tertiary);
+        color: var(--color-text);
+    }
+
+    .sidebar-link.active {
+        background: var(--color-primary);
+        color: white;
+    }
+
+    .sidebar-icon {
+        font-size: 1rem;
+        width: 20px;
+        text-align: center;
+    }
+
+    @media (max-width: 1024px) {
+        .sidebar {
+            transform: translateX(-100%);
+            z-index: 1000;
+            transition: transform var(--transition);
+        }
+
+        .sidebar.mobile-open {
+            transform: translateX(0);
+        }
+    }
+
+    @media (max-width: 768px) {
+        .sidebar {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+</style>

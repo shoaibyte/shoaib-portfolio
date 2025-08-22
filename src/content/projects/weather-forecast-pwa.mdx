@@ -1,0 +1,84 @@
+---
+title: "Weather Forecast PWA"
+description: "A progressive web app that provides detailed weather forecasts with beautiful visualizations and offline support."
+publishDate: 2024-07-20
+tags: ["pwa", "react", "chart.js", "service-worker", "geolocation"]
+featured: true
+status: "completed"
+github: "https://github.com/shoaibyte/weather-pwa"
+demo: "https://weather.shoaib.dev"
+image: "/projects/weather-app.jpg"
+---
+
+# Weather Forecast PWA
+
+A beautiful, fast, and reliable weather application that works offline and provides detailed forecasts with stunning visualizations.
+
+## Features
+
+- **Current Weather**: Real-time weather conditions for any location
+- **7-Day Forecast**: Detailed daily and hourly forecasts
+- **Interactive Charts**: Beautiful weather data visualizations
+- **Offline Support**: Works without internet connection
+- **Location Detection**: Automatic location detection with manual search
+- **Multiple Units**: Support for metric and imperial units
+- **Weather Alerts**: Severe weather notifications
+
+## Tech Stack
+
+- **Core**: React 18, TypeScript, Vite
+- **PWA**: Service Worker, Web App Manifest
+- **Charts**: Chart.js with react-chartjs-2
+- **API**: OpenWeatherMap API
+- **Styling**: Tailwind CSS with custom animations
+- **Storage**: IndexedDB for offline data
+- **Icons**: Custom weather icon set
+
+## Technical Highlights
+
+### Progressive Web App Features
+- **Installable**: Can be installed on mobile and desktop
+- **Offline-first**: Caches essential data for offline use
+- **Background Sync**: Updates data when connection is restored
+- **Push Notifications**: Weather alerts and daily summaries
+
+### Performance Optimizations
+- **Lazy Loading**: Dynamic imports for different chart types
+- **Image Optimization**: WebP images with fallbacks
+- **Data Caching**: Smart caching strategy for API responses
+- **Code Splitting**: Separate bundles for different features
+
+### User Experience
+- **Responsive Design**: Optimized for all screen sizes
+- **Smooth Animations**: CSS transitions and loading states
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Dark Mode**: Automatic theme switching based on system preference
+
+## Architecture Decisions
+
+### Offline Strategy
+Implemented a "Cache First, Network Fallback" strategy for weather data, ensuring the app works even with poor connectivity.
+
+### Data Management
+Used a custom hook system for managing weather data state, with automatic background updates and error handling.
+
+### Chart Performance
+Optimized Chart.js configuration for smooth animations with large datasets, including data point reduction for better performance.
+
+## Challenges & Solutions
+
+### Battery Life Optimization
+Implemented intelligent background sync that respects device battery levels and network conditions.
+
+### Cross-browser Compatibility
+Ensured PWA features work consistently across different browsers, with graceful degradation for unsupported features.
+
+### Data Visualization
+Created responsive charts that work well on both mobile and desktop, with touch-friendly interactions.
+
+## Future Plans
+
+- Weather radar integration
+- Social sharing of weather conditions
+- Widget for home screen
+- Integration with calendar apps for weather-aware scheduling
