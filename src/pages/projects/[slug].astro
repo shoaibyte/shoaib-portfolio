@@ -1,0 +1,38 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+
+export async function getStaticPaths() {
+    const items = await getCollection('projects');
+    return items.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = await getEntry('projects', slug);
+if (!project) { throw new Error(`Project not found: ${slug}`); }
+const { data } = project;
+const { Content } = await project.render();
+---
+
+<PortfolioLayout title={data.title} description={data.description}>
+    <article class="prose">
+        <header class="post-header">
+            <h1>{data.title}</h1>
+            <p class="desc">{data.description}</p>
+            <div class="links">
+                {data.github ? <a href={data.github}>GitHub</a> : null}
+                {data.demo ? <a href={data.demo}>Live Demo</a> : null}
+            </div>
+        </header>
+        <div class="content">
+            <Content />
+        </div>
+    </article>
+</PortfolioLayout>
+
+<style>
+    .post-header h1{margin:0 0 .5rem;font-size:2rem}
+    .desc{opacity:.9;margin:0 0 var(--space-3)}
+    .links{display:flex;gap:1rem;margin-bottom:var(--space-6)}
+    .prose{max-width:72ch}
+</style>

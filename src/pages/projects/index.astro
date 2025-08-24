@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+
+const projects = (await getCollection('projects'))
+    .sort((a,b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<PortfolioLayout title="Projects" description="Things I've built and shipped.">
+    <section class="grid">
+        {projects.map(({ slug, data }) => (
+                <article class="card">
+                    <a class="card-link" href={`/projects/${slug}/`}>
+                        <div class="project-head">
+                            <h3 class="card-title">{data.title}</h3>
+                            <span class={"status " + data.status}>{data.status}</span>
+                        </div>
+                        <p class="card-desc">{data.description}</p>
+                        <div class="links">
+                            {data.github ? <a href={data.github}>GitHub</a> : null}
+                            {data.demo ? <a href={data.demo}>Live Demo</a> : null}
+                        </div>
+                    </a>
+                </article>
+        ))}
+    </section>
+</PortfolioLayout>
+
+<style>
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6)}
+    @media(max-width:900px){.grid{grid-template-columns:1fr}}
+    .card{padding:var(--space-6);border:1px solid var(--color-border);border-radius:16px;background:var(--color-elevated);transition:transform .15s ease, box-shadow .15s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.15)}
+    .card-title{margin:0;font-size:1.1rem}
+    .card-desc{opacity:.9;margin:.5rem 0 1rem}
+    .links{display:flex;gap:1rem;opacity:.9}
+    .links a{text-decoration:underline}
+    .project-head{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+    .status{font-size:.8rem;border:1px solid var(--color-border);border-radius:999px;padding:.15rem .5rem;text-transform:capitalize}
+    .status.in-progress{opacity:.9}
+    .status.completed{opacity:.9}
+</style>

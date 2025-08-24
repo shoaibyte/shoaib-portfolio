@@ -1,0 +1,42 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import PortfolioLayout from '../../layouts/PortfolioLayout.astro';
+
+export async function getStaticPaths() {
+    const posts = await getCollection('blog');
+    return posts.map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const post = await getEntry('blog', slug);
+if (!post) { throw new Error(`Post not found: ${slug}`); }
+const { data } = post;
+const { Content } = await post.render();
+---
+
+<PortfolioLayout title={data.title} description={data.description}>
+    <article class="prose">
+        <header class="post-header">
+            <h1>{data.title}</h1>
+            <div class="meta">
+                <time datetime={data.publishDate.toISOString()}>
+                    {data.publishDate.toDateString()}
+                </time>
+                {data.updatedDate ? <span>• Updated {data.updatedDate.toDateString()}</span> : null}
+            </div>
+            <p class="desc">{data.description}</p>
+        </header>
+        <div class="content">
+            <Content />
+        </div>
+    </article>
+</PortfolioLayout>
+
+<style>
+    .post-header h1{margin:0 0 .5rem;font-size:2rem}
+    .post-header .meta{opacity:.8;margin-bottom:var(--space-3)}
+    .desc{opacity:.9;margin:0 0 var(--space-6)}
+    .prose{max-width:72ch}
+    .prose :where(h2,h3){margin-top:2rem}
+    .prose :where(p,ul,ol,pre,blockquote,table){margin:1rem 0}
+</style>
