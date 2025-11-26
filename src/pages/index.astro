@@ -2,6 +2,8 @@
 // src/pages/index.astro
 import { getCollection } from 'astro:content';
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import TechStack from '../components/common/TechStack.astro';
+import GitHubStats from '../components/common/GitHubStats.astro';
 
 // Get latest blog posts and projects
 const blogPosts = await getCollection('blog', ({ data }) => {
@@ -21,44 +23,120 @@ const latestProjects = projects
 ---
 
 <PortfolioLayout
-	title="Shoaib - Software Engineer & Creator"
-	description="Software Engineer passionate about building scalable web applications and elegant user experiences. I specialize in React, TypeScript, and modern web technologies."
+	title="Shoaib Hasan - Backend Architect & Distributed Systems Expert"
+	description="Backend Architect, Distributed Systems Expert, and Open Source Enthusiast. Award winner at International Blockchain Olympiad 2023. Building scalable microservices that power millions."
 >
 	<!-- Hero Section -->
 	<section class="hero fade-in">
 		<div class="hero-content">
-			<h1>Hey, I'm Shoaib!</h1>
+			<div class="hero-greeting">
+				<h1>Hey, I'm <span class="hero-name">Shoaib</span>!</h1>
+			</div>
+			
+			<div class="hero-roles">
+				<span class="role-text" id="role-text">Backend Architect</span>
+				<span class="role-cursor">|</span>
+			</div>
+
+			<div class="hero-achievement-badge" role="status" aria-label="Achievement: IBCOL 2023 Award Winner, 6th Place International">
+				<span class="badge-icon" aria-hidden="true">🏆</span>
+				<span class="badge-text">IBCOL 2023 Award Winner (6th Place International)</span>
+			</div>
+
+			<div class="hero-metrics">
+				<div class="metric-item">
+					<span class="metric-value">$200K+</span>
+					<span class="metric-label">Revenue Impact</span>
+				</div>
+				<div class="metric-divider">|</div>
+				<div class="metric-item">
+					<span class="metric-value">99.9%</span>
+					<span class="metric-label">Uptime</span>
+				</div>
+				<div class="metric-divider">|</div>
+				<div class="metric-item">
+					<span class="metric-value">30K+</span>
+					<span class="metric-label">Users</span>
+				</div>
+			</div>
+
+			<div class="hero-location">
+				<span class="location-icon">📍</span>
+				<span class="location-text">Dhaka, Bangladesh 🇧🇩</span>
+			</div>
+
 			<p class="hero-description">
-				I'm a software engineer, open-source creator, and passionate developer.
-				I've been building scalable distributed systems since 2022 and
-				<a href="/blog" class="hero-highlight">writing on this blog</a> for over two years!
+				Building scalable microservices that power millions. Passionate about distributed systems, 
+				cloud architecture, and blockchain technology.
 			</p>
-			<p class="hero-note">
-				Everything on this site is written by me, not AI.
-			</p>
+
 			<div class="hero-actions">
-				<a href="/about" class="btn btn-primary">
-					<span>👤</span>
-					About Me
+				<a href="/projects" class="btn btn-primary">
+					<span>🚀</span>
+					View Projects
 				</a>
-				<a href="/contact" class="btn btn-secondary">
+				<a href="/blog" class="btn btn-secondary">
+					<span>📝</span>
+					Read Blog
+				</a>
+				<a href="mailto:shoaib.hasan1801@gmail.com" class="btn btn-tertiary">
 					<span>📧</span>
 					Get in Touch
 				</a>
 			</div>
 		</div>
 
-
 		<div class="hero-avatar fade-in fade-in-delay-1">
-			<img
-				src="/profile.jpeg"
-				alt="Shoaib"
-				class="avatar"
-				width="200"
-				height="200"
-			>
+			<div class="avatar-wrapper">
+				<img
+					src="/profile.jpeg"
+					alt="Shoaib Hasan"
+					class="avatar"
+					width="280"
+					height="280"
+					loading="eager"
+					fetchpriority="high"
+				>
+				<div class="avatar-border"></div>
+				<div class="floating-icons">
+					<div class="floating-icon icon-aws">☁️</div>
+					<div class="floating-icon icon-docker">🐳</div>
+					<div class="floating-icon icon-k8s">⚙️</div>
+				</div>
+			</div>
 		</div>
 	</section>
+
+	<!-- Achievements Section -->
+	<section id="achievements" class="achievements-section fade-in fade-in-delay-2">
+		<h2 class="section-title">Achievements & Recognition</h2>
+		<div class="achievements-grid" role="list">
+			<div class="achievement-card" role="listitem" tabindex="0">
+				<div class="achievement-icon" aria-hidden="true">🏆</div>
+				<h3 class="achievement-title">IBCOL 2023</h3>
+				<p class="achievement-subtitle">6th Place International</p>
+				<p class="achievement-description">Blockchain Olympiad<br>Amsterdam, Netherlands</p>
+			</div>
+			<div class="achievement-card" role="listitem" tabindex="0">
+				<div class="achievement-icon" aria-hidden="true">💰</div>
+				<h3 class="achievement-title">Revenue Impact</h3>
+				<p class="achievement-subtitle">$200K+ Platform Revenue</p>
+				<p class="achievement-description">Through Infrastructure<br>Improvements</p>
+			</div>
+			<div class="achievement-card" role="listitem" tabindex="0">
+				<div class="achievement-icon" aria-hidden="true">⚡</div>
+				<h3 class="achievement-title">Performance Expert</h3>
+				<p class="achievement-subtitle">99.9% System Uptime</p>
+				<p class="achievement-description">30% Latency Reduction<br>Scalable Architecture</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- Tech Stack Section -->
+	<TechStack />
+
+	<!-- GitHub Stats Section -->
+	<GitHubStats />
 
 	<!-- Content Grid -->
 	<div class="content-grid">
@@ -109,11 +187,34 @@ const latestProjects = projects
 					<a href={`/projects/${project.slug}`} class="post-card project-card">
 						<div class="project-header">
 							<h3 class="post-title">{project.data.title}</h3>
+							{project.data.status && (
+								<span class={`status-badge status-${project.data.status}`}>
+									{project.data.status}
+								</span>
+							)}
+						</div>
+						{project.data.description && (
+							<p class="post-description">{project.data.description}</p>
+						)}
+						{project.data.tags && project.data.tags.length > 0 && (
+							<div class="post-tags">
+								{project.data.tags.slice(0, 4).map((tag) => (
+									<span class="tag tech-tag">{tag}</span>
+								))}
+							</div>
+						)}
+						<div class="project-card-footer">
+							<time class="post-date">
+								{project.data.publishDate.toLocaleDateString('en-US', {
+									year: 'numeric',
+									month: 'short'
+								})}
+							</time>
 							<div class="project-links">
 								{project.data.github && (
 									<a
 										href={project.data.github}
-										class="project-link"
+										class="project-link-icon"
 										target="_blank"
 										rel="noopener noreferrer"
 										aria-label="GitHub"
@@ -125,7 +226,7 @@ const latestProjects = projects
 								{project.data.demo && (
 									<a
 										href={project.data.demo}
-										class="project-link"
+										class="project-link-icon"
 										target="_blank"
 										rel="noopener noreferrer"
 										aria-label="Live Demo"
@@ -136,27 +237,6 @@ const latestProjects = projects
 								)}
 							</div>
 						</div>
-						<time class="post-date">
-							{project.data.publishDate.toLocaleDateString('en-US', {
-								year: 'numeric',
-								month: 'long'
-							})}
-						</time>
-						{project.data.description && (
-							<p class="post-description">{project.data.description}</p>
-						)}
-						{project.data.status && (
-							<span class={`status-badge status-${project.data.status}`}>
-                {project.data.status}
-              </span>
-						)}
-						{project.data.tags && project.data.tags.length > 0 && (
-							<div class="post-tags">
-								{project.data.tags.slice(0, 3).map((tag) => (
-									<span class="tag">{tag}</span>
-								))}
-							</div>
-						)}
 					</a>
 				))}
 			</div>
@@ -168,46 +248,143 @@ const latestProjects = projects
 	/* Hero Section */
 	.hero {
 		display: grid;
-		grid-template-columns: 1fr 200px;
+		grid-template-columns: 1fr 320px;
 		gap: var(--space-12);
 		align-items: center;
 		margin-bottom: var(--space-16);
 	}
 
 	.hero-content h1 {
-		font-size: 3rem;
+		font-size: 3.5rem;
 		font-weight: 800;
 		line-height: 1.1;
-		margin-bottom: var(--space-6);
+		margin-bottom: var(--space-4);
 		color: var(--color-text);
+	}
+
+	.hero-name {
+		background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
+		background-clip: text;
+	}
+
+	.hero-roles {
+		font-size: 1.5rem;
+		font-weight: 600;
+		color: var(--color-text-secondary);
+		margin-bottom: var(--space-6);
+		min-height: 2rem;
+		font-family: var(--font-mono);
+	}
+
+	.role-text {
+		color: var(--color-primary);
+	}
+
+	.role-cursor {
+		animation: blink 1s infinite;
+		margin-left: 4px;
+	}
+
+	@keyframes blink {
+		0%, 50% { opacity: 1; }
+		51%, 100% { opacity: 0; }
+	}
+
+	.hero-achievement-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-4);
+		background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1));
+		border: 1px solid var(--color-primary);
+		border-radius: var(--radius-full);
+		margin-bottom: var(--space-6);
+		font-size: 0.875rem;
+		font-weight: 600;
+		color: var(--color-primary);
+		position: relative;
+		overflow: hidden;
+		animation: pulse 3s ease-in-out infinite;
+	}
+
+	.hero-achievement-badge::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: -100%;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+		animation: shine 3s infinite;
+	}
+
+	.badge-icon {
+		font-size: 1.125rem;
+	}
+
+	.hero-metrics {
+		display: flex;
+		align-items: center;
+		gap: var(--space-4);
+		margin-bottom: var(--space-6);
+		flex-wrap: wrap;
+	}
+
+	.metric-item {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-1);
+	}
+
+	.metric-value {
+		font-size: 1.5rem;
+		font-weight: 700;
+		color: var(--color-accent-green);
+		font-family: var(--font-mono);
+	}
+
+	.metric-label {
+		font-size: 0.75rem;
+		color: var(--color-text-secondary);
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.metric-divider {
+		color: var(--color-text-secondary);
+		opacity: 0.3;
+	}
+
+	.hero-location {
+		display: inline-flex;
+		align-items: center;
+		gap: var(--space-2);
+		padding: var(--space-2) var(--space-4);
+		background: var(--color-bg-secondary);
+		border-radius: var(--radius-full);
+		margin-bottom: var(--space-6);
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+	}
+
+	.location-icon {
+		font-size: 1rem;
 	}
 
 	.hero-description {
 		font-size: 1.125rem;
 		color: var(--color-text-secondary);
 		line-height: 1.7;
-		margin-bottom: var(--space-2);
-	}
-
-	.hero-highlight {
-		color: var(--color-primary);
-		text-decoration: none;
-		font-weight: 600;
-	}
-
-	.hero-highlight:hover {
-		text-decoration: underline;
-	}
-
-	.hero-note {
-		font-size: 1rem;
-		color: var(--color-text-secondary);
 		margin-bottom: var(--space-8);
+		max-width: 600px;
 	}
 
 	.hero-actions {
 		display: flex;
 		gap: var(--space-4);
+		flex-wrap: wrap;
 	}
 
 	.btn {
@@ -225,6 +402,11 @@ const latestProjects = projects
 		transition: all var(--transition-fast);
 	}
 
+	.btn:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
 	.btn-primary {
 		background: var(--color-primary);
 		color: white;
@@ -233,6 +415,7 @@ const latestProjects = projects
 	.btn-primary:hover {
 		background: var(--color-primary-dark);
 		transform: translateY(-1px);
+		box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
 	}
 
 	.btn-secondary {
@@ -244,23 +427,181 @@ const latestProjects = projects
 	.btn-secondary:hover {
 		background: var(--color-bg-tertiary);
 		transform: translateY(-1px);
+		border-color: var(--color-primary);
+	}
+
+	.btn-tertiary {
+		background: transparent;
+		color: var(--color-text-secondary);
+		border: 1px solid var(--color-border);
+	}
+
+	.btn-tertiary:hover {
+		color: var(--color-text);
+		border-color: var(--color-primary);
+		transform: translateY(-1px);
 	}
 
 	.hero-avatar {
 		position: relative;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.avatar-wrapper {
+		position: relative;
+		width: 280px;
+		height: 280px;
 	}
 
 	.avatar {
-		width: 200px;
-		height: 200px;
+		width: 280px;
+		height: 280px;
 		border-radius: 50%;
 		object-fit: cover;
-		border: 4px solid var(--color-border);
+		position: relative;
+		z-index: 2;
 		transition: all var(--transition);
 	}
 
-	.avatar:hover {
-		transform: scale(1.05);
+	.avatar-border {
+		position: absolute;
+		top: -8px;
+		left: -8px;
+		right: -8px;
+		bottom: -8px;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--color-primary), var(--color-accent-cyan));
+		z-index: 1;
+		opacity: 0.3;
+		animation: rotate 20s linear infinite;
+	}
+
+	@keyframes rotate {
+		from { transform: rotate(0deg); }
+		to { transform: rotate(360deg); }
+	}
+
+	.floating-icons {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		pointer-events: none;
+	}
+
+	.floating-icon {
+		position: absolute;
+		font-size: 2rem;
+		opacity: 0.6;
+		animation: float 6s ease-in-out infinite;
+	}
+
+	.icon-aws {
+		top: -20px;
+		left: 50%;
+		transform: translateX(-50%);
+		animation-delay: 0s;
+	}
+
+	.icon-docker {
+		bottom: -20px;
+		left: -20px;
+		animation-delay: 2s;
+	}
+
+	.icon-k8s {
+		bottom: -20px;
+		right: -20px;
+		animation-delay: 4s;
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0) translateX(0); }
+		50% { transform: translateY(-20px) translateX(10px); }
+	}
+
+	@keyframes shine {
+		0% { left: -100%; }
+		100% { left: 100%; }
+	}
+
+	/* Achievements Section */
+	.achievements-section {
+		margin-bottom: var(--space-16);
+	}
+
+	.achievements-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--space-6);
+		margin-top: var(--space-8);
+	}
+
+	.achievement-card {
+		padding: var(--space-6);
+		background: var(--color-bg-secondary);
+		border: 1px solid var(--color-border);
+		border-radius: var(--radius-xl);
+		text-align: center;
+		transition: all var(--transition-fast);
+		position: relative;
+		overflow: hidden;
+	}
+
+	.achievement-card:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	.achievement-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 4px;
+		background: linear-gradient(90deg, var(--color-primary), var(--color-accent-cyan));
+		opacity: 0;
+		transition: opacity var(--transition-fast);
+	}
+
+	.achievement-card:hover {
+		transform: translateY(-4px);
+		border-color: var(--color-primary);
+		box-shadow: 0 8px 24px rgba(14, 165, 233, 0.15);
+	}
+
+	.achievement-card:hover::before {
+		opacity: 1;
+	}
+
+	.achievement-icon {
+		font-size: 3rem;
+		margin-bottom: var(--space-4);
+		display: block;
+	}
+
+	.achievement-title {
+		font-size: 1.25rem;
+		font-weight: 700;
+		color: var(--color-text);
+		margin-bottom: var(--space-2);
+	}
+
+	.achievement-subtitle {
+		font-size: 1rem;
+		font-weight: 600;
+		color: var(--color-primary);
+		margin-bottom: var(--space-2);
+	}
+
+	.achievement-description {
+		font-size: 0.875rem;
+		color: var(--color-text-secondary);
+		line-height: 1.6;
 	}
 
 	/* Content Sections */
@@ -364,11 +705,42 @@ const latestProjects = projects
 	}
 
 	/* Project Cards */
+	.project-card {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.project-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		height: 3px;
+		background: linear-gradient(90deg, var(--color-primary), var(--color-accent-cyan));
+		opacity: 0;
+		transition: opacity var(--transition-fast);
+	}
+
+	.project-card:hover::before {
+		opacity: 1;
+	}
+
 	.project-card .project-header {
 		display: flex;
 		justify-content: space-between;
 		align-items: flex-start;
-		margin-bottom: var(--space-2);
+		gap: var(--space-3);
+		margin-bottom: var(--space-3);
+	}
+
+	.project-card-footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-top: var(--space-3);
+		padding-top: var(--space-3);
+		border-top: 1px solid var(--color-border);
 	}
 
 	.project-links {
@@ -376,40 +748,53 @@ const latestProjects = projects
 		gap: var(--space-2);
 	}
 
-	.project-link {
-		font-size: 1rem;
+	.project-link-icon {
+		font-size: 1.125rem;
 		text-decoration: none;
 		opacity: 0.7;
-		transition: opacity var(--transition-fast);
+		transition: all var(--transition-fast);
+		display: inline-block;
 	}
 
-	.project-link:hover {
+	.project-link-icon:hover {
 		opacity: 1;
+		transform: scale(1.2);
 	}
 
 	.status-badge {
 		display: inline-block;
-		padding: var(--space-1) var(--space-2);
-		border-radius: var(--radius);
+		padding: var(--space-1) var(--space-3);
+		border-radius: var(--radius-full);
 		font-size: 0.75rem;
-		font-weight: 500;
+		font-weight: 600;
 		text-transform: capitalize;
-		margin-bottom: var(--space-2);
+		white-space: nowrap;
+		flex-shrink: 0;
 	}
 
 	.status-completed {
-		background: rgba(16, 185, 129, 0.1);
+		background: rgba(16, 185, 129, 0.15);
 		color: var(--color-accent-green);
+		border: 1px solid rgba(16, 185, 129, 0.3);
 	}
 
 	.status-in-progress {
-		background: rgba(245, 158, 11, 0.1);
+		background: rgba(245, 158, 11, 0.15);
 		color: var(--color-accent-orange);
+		border: 1px solid rgba(245, 158, 11, 0.3);
 	}
 
 	.status-planned {
-		background: rgba(139, 92, 246, 0.1);
+		background: rgba(139, 92, 246, 0.15);
 		color: var(--color-accent-purple);
+		border: 1px solid rgba(139, 92, 246, 0.3);
+	}
+
+	.tech-tag {
+		background: var(--color-bg-tertiary);
+		border: 1px solid var(--color-border);
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
 	}
 
 	/* Responsive Design */
@@ -417,6 +802,10 @@ const latestProjects = projects
 		.content-grid {
 			grid-template-columns: 1fr;
 			gap: var(--space-8);
+		}
+
+		.achievements-grid {
+			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
@@ -427,26 +816,63 @@ const latestProjects = projects
 			gap: var(--space-8);
 		}
 
+		.avatar-wrapper {
+			width: 240px;
+			height: 240px;
+		}
+
 		.avatar {
-			width: 150px;
-			height: 150px;
+			width: 240px;
+			height: 240px;
+		}
+
+		.hero-content {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.hero-metrics {
+			justify-content: center;
+		}
+
+		.achievements-grid {
+			grid-template-columns: 1fr;
 		}
 	}
 
 	@media (max-width: 768px) {
 		.hero-content h1 {
-			font-size: 2.25rem;
+			font-size: 2.5rem;
+		}
+
+		.hero-roles {
+			font-size: 1.25rem;
 		}
 
 		.hero-actions {
 			flex-direction: column;
-			align-items: center;
+			align-items: stretch;
+			width: 100%;
 		}
 
 		.btn {
 			width: 100%;
-			max-width: 200px;
 			justify-content: center;
+		}
+
+		.avatar-wrapper {
+			width: 200px;
+			height: 200px;
+		}
+
+		.avatar {
+			width: 200px;
+			height: 200px;
+		}
+
+		.floating-icon {
+			font-size: 1.5rem;
 		}
 
 		.section-title {
@@ -461,5 +887,136 @@ const latestProjects = projects
 		.project-links {
 			align-self: flex-start;
 		}
+
+		.metric-value {
+			font-size: 1.25rem;
+		}
 	}
 </style>
+
+<script>
+	// Typing animation for roles
+	function initTypingAnimation() {
+		const roleText = document.getElementById('role-text');
+		if (!roleText) return;
+
+		const roles = [
+			'Backend Architect',
+			'Distributed Systems Expert',
+			'Open Source Enthusiast'
+		];
+
+		let currentRoleIndex = 0;
+		let currentCharIndex = 0;
+		let isDeleting = false;
+		let typingSpeed = 100;
+
+		function typeRole() {
+			const currentRole = roles[currentRoleIndex];
+			
+			if (isDeleting) {
+				roleText.textContent = currentRole.substring(0, currentCharIndex - 1);
+				currentCharIndex--;
+				typingSpeed = 50;
+			} else {
+				roleText.textContent = currentRole.substring(0, currentCharIndex + 1);
+				currentCharIndex++;
+				typingSpeed = 100;
+			}
+
+			if (!isDeleting && currentCharIndex === currentRole.length) {
+				typingSpeed = 2000; // Pause at end
+				isDeleting = true;
+			} else if (isDeleting && currentCharIndex === 0) {
+				isDeleting = false;
+				currentRoleIndex = (currentRoleIndex + 1) % roles.length;
+				typingSpeed = 500; // Pause before next role
+			}
+
+			setTimeout(typeRole, typingSpeed);
+		}
+
+		// Start typing after a short delay
+		setTimeout(typeRole, 1000);
+	}
+
+	// Number counter animation
+	function animateCounter(element: HTMLElement | null, target: number, suffix: string = '') {
+		if (!element) return;
+		const duration = 2000;
+		const start = 0;
+		const increment = target / (duration / 16);
+		let current = start;
+
+		const updateCounter = () => {
+			current += increment;
+			if (current < target) {
+				element.textContent = Math.floor(current) + suffix;
+				requestAnimationFrame(updateCounter);
+			} else {
+				element.textContent = target + suffix;
+			}
+		};
+
+		// Start animation when element is in viewport
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					updateCounter();
+					observer.unobserve(entry.target);
+				}
+			});
+		}, { threshold: 0.5 });
+
+		observer.observe(element);
+	}
+
+	// Scroll animations for sections
+	function initScrollAnimations() {
+		const observerOptions = {
+			threshold: 0.1,
+			rootMargin: '0px 0px -50px 0px'
+		};
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('animate-in');
+					observer.unobserve(entry.target);
+				}
+			});
+		}, observerOptions);
+
+		// Observe all sections
+		document.querySelectorAll('.achievements-section, .tech-stack-section, .github-stats-section, .content-section').forEach(section => {
+			observer.observe(section);
+		});
+	}
+
+	// Initialize number counters
+	function initCounters() {
+		const metricValues = document.querySelectorAll('.metric-value');
+		metricValues.forEach(metric => {
+			const text = metric.textContent || '';
+			const number = parseInt(text.replace(/[^0-9]/g, ''));
+			const suffix = text.replace(/[0-9]/g, '');
+			
+			if (number && !isNaN(number)) {
+				animateCounter(metric as HTMLElement | null, number, suffix);
+			}
+		});
+	}
+
+	// Initialize all functionality
+	function initAll() {
+		initTypingAnimation();
+		initScrollAnimations();
+		initCounters();
+	}
+
+	// Initialize on page load
+	document.addEventListener('DOMContentLoaded', initAll);
+	
+	// Re-initialize on Astro page navigation
+	document.addEventListener('astro:page-load', initAll);
+</script>
