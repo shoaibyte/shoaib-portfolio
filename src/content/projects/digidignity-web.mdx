@@ -1,0 +1,166 @@
+---
+title: "DigiDignity - AI × Blockchain Identity System"
+description: "AI-integrated blockchain identity system for refugees and stateless populations. Modern Next.js frontend with secure identity UX, wallet integration, and full mock flows."
+publishDate: 2024-12-15
+tags: ["nextjs", "typescript", "blockchain", "ai", "wagmi", "tailwind", "web3"]
+featured: true
+status: "completed"
+github: "https://github.com/shoaibyte/digidignity-web"
+demo: "https://digidignity-frontend.onrender.com"
+---
+
+# DigiDignity — AI × Blockchain Identity System
+
+DigiDignity is a modern, production-ready identity system that combines AI and blockchain technology to provide secure, portable digital identity for refugees and stateless populations. The frontend is built with Next.js 14 and features a complete user experience with wallet integration, selective disclosure, and cross-border portability.
+
+## Project Overview
+
+DigiDignity addresses the critical challenge of identity verification for displaced populations by leveraging blockchain technology for immutable identity records and AI for intelligent verification processes. The system enables secure, privacy-preserving identity management that works across borders.
+
+## Key Features
+
+### Identity Management
+- **Identity Registration**: Secure registration flow with blockchain-based identity creation
+- **Selective Disclosure**: Users can selectively share identity attributes without revealing full identity
+- **Emergency Access**: Emergency access mechanisms for critical situations
+- **Cross-Border Portability**: Identity hash portability for seamless cross-border verification
+
+### User Experience
+- **Modern UI/UX**: Beautiful, AI × blockchain themed interface with glass morphism effects
+- **Wallet Integration**: Full Web3 wallet support via wagmi v2 and viem
+- **Mock Flows**: Complete end-to-end mock flows that work without contracts or RPC secrets
+- **Responsive Design**: Optimized for all devices with Tailwind CSS
+
+### Verification System
+- **Verifier Console**: Dedicated console for identity verifiers with mock verification endpoints
+- **Proof Generation**: Secure proof generation for identity attributes
+- **Privacy-Preserving**: Zero-knowledge principles for minimal data exposure
+
+## Tech Stack
+
+### Frontend Framework
+- **Next.js 14** (App Router) - Modern React framework with server components
+- **TypeScript** - Full type safety across the application
+- **Tailwind CSS** - Utility-first styling with custom animations
+- **tailwindcss-animate** - Smooth animations and transitions
+
+### Web3 Integration
+- **wagmi v2** - React hooks for Ethereum
+- **viem** - TypeScript Ethereum library
+- **Safe Fallback RPC** - Works without requiring RPC secrets
+
+### UI Components
+- **lucide-react** - Modern icon library
+- **shadcn-style primitives** - Reusable UI components (Button, Card, Input, Label)
+- **Custom glass/gradient styles** - Unique visual design
+
+## Project Structure
+
+```
+src/
+  app/
+    api/proof/route.ts         # Mock verification endpoint
+    page.tsx                   # Marketing/landing page
+    layout.tsx                 # Fonts, providers, global nav
+    dashboard/page.tsx         # Hub + wallet connect
+    register/page.tsx          # Identity registration (mock)
+    proofs/page.tsx            # Selective disclosure (mock)
+    verify/page.tsx            # Verifier console (mock table)
+    emergency/page.tsx         # Emergency access (mock)
+    cross-border/page.tsx      # Portability hash (mock)
+  components/
+    nav/AppHeader.tsx
+    proofs/SelectiveDisclosureForm.tsx
+    ui/{button,card,input,label}.tsx
+  lib/
+    providers.ts               # wagmi + react-query wrappers
+    wagmi.tsx                  # wagmi config (injected connector, fallback RPC)
+    utils.ts                   # Utility functions (cn())
+styles/
+  globals.css                  # Glass/gradient styles
+```
+
+## Technical Implementation
+
+### Wallet Integration
+The application uses wagmi v2 for seamless wallet connection with support for:
+- Injected wallet connectors (MetaMask, etc.)
+- Safe fallback RPC endpoints
+- Type-safe contract interactions (ready for real contracts)
+
+### Mock Architecture
+Designed with full mock flows to enable:
+- Development without blockchain contracts
+- Testing without RPC secrets
+- Demonstration of complete user journeys
+- Easy transition to real contract integration
+
+### Type Safety
+- **Typed Routes**: Next.js experimental typed routes enabled
+- **TypeScript**: Strict type checking throughout
+- **Route Casting**: Proper type casting for Next.js routes
+
+## Deployment
+
+### Render Deployment
+The application is deployed on Render with:
+- **Build Command**: `corepack enable && corepack prepare pnpm@latest --activate && pnpm install && pnpm build`
+- **Start Command**: `pnpm start`
+- **Environment Variables**: Optional `NEXT_PUBLIC_RPC_SEPOLIA` (fallback provided)
+
+### Production Features
+- Optimized production builds
+- Static asset optimization
+- Environment-based configuration
+- Error handling and monitoring ready
+
+## Future Enhancements
+
+### Real Contract Integration
+The architecture is designed for easy migration to real smart contracts:
+- Replace mock endpoints with viem/wagmi contract calls
+- Add ABI files to `src/lib/abis/*`
+- Configure contract addresses via environment variables
+- Implement real blockchain transactions
+
+### Additional Features
+- Multi-chain support
+- Advanced AI verification
+- Enhanced privacy features
+- Mobile app integration
+
+## Technical Challenges Solved
+
+### Mock-First Development
+Created a complete mock system that allows full development and testing without blockchain infrastructure, making it accessible for demos and development.
+
+### Wallet UX
+Implemented smooth wallet connection flow with proper error handling and fallback mechanisms for users without wallets installed.
+
+### Type Safety
+Leveraged Next.js typed routes and TypeScript to ensure compile-time safety for all routes and components.
+
+## Impact
+
+DigiDignity addresses a critical real-world problem:
+- **Identity for Displaced Populations**: Provides secure digital identity for refugees and stateless individuals
+- **Cross-Border Portability**: Enables identity verification across different jurisdictions
+- **Privacy-Preserving**: Implements selective disclosure for minimal data exposure
+- **Blockchain Immutability**: Ensures identity records cannot be tampered with
+
+## Links
+
+- **GitHub Repository**: [shoaibyte/digidignity-web](https://github.com/shoaibyte/digidignity-web)
+- **Live Demo**: [digidignity-frontend.onrender.com](https://digidignity-frontend.onrender.com)
+
+## Technologies Used
+
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- wagmi v2
+- viem
+- lucide-react
+- pnpm
+- Render (Deployment)
+

@@ -1,0 +1,321 @@
+---
+title: "JWT Authentication System Explained - Building Secure APIs with Golang"
+description: "A comprehensive guide to implementing production-grade JWT authentication in Go. Learn about access tokens, refresh tokens, security best practices, and protecting your APIs from common attacks."
+publishDate: 2025-01-26
+tags: ["golang", "jwt", "authentication", "security", "backend", "api", "bcrypt"]
+featured: true
+draft: false
+---
+
+# JWT Authentication System Explained
+
+Building secure APIs requires robust authentication mechanisms. In this guide, we'll explore how to implement a production-grade JWT (JSON Web Token) authentication system using Golang, complete with access tokens, refresh tokens, and comprehensive security measures.
+
+## 🏰 The Castle Analogy
+
+Think of your API as a **castle** with valuable treasures (user data, matches, etc.):
+
+- **Signup** = Creating a new citizen account
+- **Login** = Getting your daily entry pass (Access Token) + monthly pass (Refresh Token)
+- **Access Token** = 15-minute temporary badge to enter castle rooms
+- **Refresh Token** = 7-day voucher to get new temporary badges without re-login
+- **Logout** = Throwing away your passes (client-side)
+
+### Why Two Tokens?
+
+**Access Token (15 min):**
+
+- Short-lived for security
+- If stolen, attacker only has 15 minutes
+- Sent with every API request
+
+**Refresh Token (7 days):**
+
+- Long-lived for convenience
+- Used ONLY to get new access tokens
+- Stored securely (httpOnly cookie in production)
+- If stolen, attacker can't access API directly, only get new access tokens
+
+## 📊 Sequence Diagrams
+
+### 1. Signup Flow
+
+<div class="sequence-diagram">
+    <img src="/jwt_signup_flow.png" alt="JWT Signup Flow Sequence Diagram" />
+</div>
+
+### 2. Login Flow
+
+<div class="sequence-diagram">
+    <img src="/jwt_login_flow.png" alt="JWT Login Flow Sequence Diagram" />
+</div>
+
+### 3. Refresh Token Flow
+
+<div class="sequence-diagram">
+    <img src="/jwt_refresh_token_flow.png" alt="JWT Refresh Token Flow Sequence Diagram" />
+</div>
+
+### 4. Protected API Request Flow
+
+<div class="sequence-diagram">
+    <img src="/jwt_protected_resource_flow.png" alt="JWT Protected Resource Flow Sequence Diagram" />
+</div>
+
+## 🔐 JWT Security Deep Dive
+
+### JWT Structure
+
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMTIzIiwiZW1haWwiOiJqb2huQGV4YW1wbGUuY29tIiwiZXhwIjoxNzAwMDAwMDAwfQ.signature_here
+Header (Base64)                           Payload (Base64)                                      Signature (HMAC-SHA256)
+```
+
+### 1. Header
+
+```json
+{
+  "alg": "HS256",  // HMAC with SHA-256
+  "typ": "JWT"
+}
+```
+
+### 2. Payload (Claims)
+
+```json
+{
+  "user_id": "550e8400-e29b-41d4-a716-446655440000",
+  "email": "john.doe@example.com",
+  "exp": 1732560000,  // Expiry timestamp
+  "iat": 1732559100   // Issued at timestamp
+}
+```
+
+### 3. Signature
+
+```
+HMACSHA256(
+  base64UrlEncode(header) + "." + base64UrlEncode(payload),
+  secret_key
+)
+```
+
+## 🛡️ Security Measures in This Implementation
+
+### 1. Password Security
+
+```go
+// bcrypt with cost factor 12
+// Input: "SecurePass123!"
+// Output: "$2a$12$KIXxPz8vjT7lQ.zF3rF5h.BqV8..."
+// - Salt automatically generated (random per password)
+// - Computationally expensive (prevents brute force)
+// - One-way hash (can't reverse)
+```
+
+**Why bcrypt cost 12?**
+
+- Cost 10 = 77ms to hash
+- Cost 12 = 250ms to hash ✅ Sweet spot
+- Cost 14 = 1 second to hash
+
+Higher cost = slower login BUT much harder to crack if database leaked.
+
+### 2. Token Expiry Strategy
+
+**Access Token: 15 minutes**
+
+- Stolen token? Attacker has max 15 min
+- User stays logged in via refresh tokens
+- Sent with every request (higher exposure risk)
+
+**Refresh Token: 7 days**
+
+- Used rarely (only to refresh)
+- Lower exposure risk
+- If stolen, attacker can keep generating access tokens
+- Should be stored in httpOnly cookie (future improvement)
+
+### 3. Token Validation
+
+```go
+// Step 1: Parse token structure
+token, err := jwt.ParseWithClaims(...)
+
+// Step 2: Verify signature (prevents tampering)
+if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+    return ErrInvalidToken
+}
+
+// Step 3: Check expiry
+if errors.Is(err, jwt.ErrTokenExpired) {
+    return ErrExpiredToken
+}
+
+// Step 4: Validate claims
+claims, ok := token.Claims.(*Claims)
+if !ok || !token.Valid {
+    return ErrInvalidToken
+}
+```
+
+### 4. Dual Token Check on Refresh
+
+```go
+// Not just validating token...
+// Also checking if user still active in DB
+user, err := s.userRepo.FindByID(ctx, claims.UserID)
+if !user.IsActive {
+    return ErrUnauthorized  // User deactivated? No refresh!
+}
+```
+
+## 🚨 Attack Scenarios & Protections
+
+### Scenario 1: Database Leaked
+
+**Attack:** Hacker gets user table with password hashes
+
+**Protection:** 
+
+- bcrypt hashes can't be reversed
+- Cracking one password takes hours/days
+- Each password has unique salt
+
+### Scenario 2: Access Token Stolen (XSS)
+
+**Attack:** Malicious JS steals token from localStorage
+
+**Protection:**
+
+- Only valid for 15 minutes
+- After expiry, attacker is locked out
+- User can change password → invalidates refresh token
+
+### Scenario 3: Refresh Token Stolen
+
+**Attack:** Attacker intercepts refresh token
+
+**Protection (Current):**
+
+- Must know when to use it (only when access expires)
+- User can logout → delete their tokens client-side
+
+**Future Improvement:**
+
+- Token rotation: New refresh token with each use
+- Token families: Detect if old refresh token reused
+- httpOnly cookies: JS can't access
+
+### Scenario 4: Man-in-the-Middle (MITM)
+
+**Attack:** Intercept HTTP requests
+
+**Protection:**
+
+- HTTPS/TLS in production (Render auto-provides)
+- Tokens encrypted in transit
+
+### Scenario 5: Token Tampering
+
+**Attack:** Modify token payload (change user_id)
+
+**Protection:**
+
+- HMAC signature verification
+- Any change → signature invalid → rejected
+
+## 🔄 Token Lifecycle
+
+```
+Day 1, 9:00 AM - User logs in
+├─ Access Token: Valid until 9:15 AM
+└─ Refresh Token: Valid until Day 8, 9:00 AM
+
+Day 1, 9:14 AM - Access token about to expire
+├─ Client checks expiry
+└─ Calls /refresh with refresh token
+
+Day 1, 9:14 AM - Server issues new tokens
+├─ NEW Access Token: Valid until 9:29 AM
+└─ NEW Refresh Token: Valid until Day 8, 9:14 AM (rotation)
+
+Day 1, 9:28 AM - Again, access token expiring
+└─ Repeat refresh flow
+
+Day 8, 9:00 AM - Refresh token expired
+└─ User must login again (full authentication)
+```
+
+## 📝 Code Flow Summary
+
+**Signup:**
+
+1. Validate email/phone not exists
+2. Hash password (bcrypt cost 12)
+3. Save user to database
+4. Generate access + refresh tokens
+5. Return tokens to client
+
+**Login:**
+
+1. Find user by email
+2. Compare password hash
+3. Check user is active
+4. Generate tokens
+5. Update last_login
+6. Return tokens
+
+**Refresh:**
+
+1. Validate refresh token signature
+2. Check token not expired
+3. Find user by ID from token
+4. Check user still active
+5. Generate NEW access token
+6. Generate NEW refresh token (rotation)
+7. Return new tokens
+
+**Protected Request:**
+
+1. Extract token from header
+2. Validate token
+3. Extract user ID from claims
+4. Inject into request context
+5. Handler accesses user ID
+6. Process request
+
+## 🎯 Key Takeaways
+
+This implementation provides a **production-grade JWT authentication system** with:
+
+✅ **Short-lived access tokens** (15 min) for security  
+✅ **Long-lived refresh tokens** (7 days) for convenience  
+✅ **bcrypt password hashing** (cost 12) for protection  
+✅ **HMAC-SHA256 signatures** to prevent tampering  
+✅ **User status validation** on every refresh  
+✅ **Comprehensive error handling** for all edge cases  
+✅ **Context-based user injection** for clean handler code  
+
+## 🔮 Future Enhancements
+
+While this system is production-ready, here are some improvements to consider:
+
+1. **Token Rotation**: Issue new refresh token on each refresh
+2. **Token Families**: Track refresh token lineage to detect reuse
+3. **httpOnly Cookies**: Store refresh tokens in httpOnly cookies
+4. **Rate Limiting**: Prevent brute force attacks on login/refresh
+5. **Device Tracking**: Associate tokens with devices for better security
+6. **Token Blacklisting**: Ability to revoke tokens before expiry
+7. **Multi-Factor Authentication**: Add 2FA for additional security
+
+## 📚 Further Reading
+
+- [JWT.io](https://jwt.io/) - JWT specification and debugger
+- [OWASP Authentication Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html)
+- [Go JWT Library Documentation](https://github.com/golang-jwt/jwt)
+
+---
+
+This authentication system demonstrates best practices for securing APIs with JWT tokens in Golang. The dual-token approach balances security and user experience, while the comprehensive validation ensures your API remains protected against common attack vectors.
+
