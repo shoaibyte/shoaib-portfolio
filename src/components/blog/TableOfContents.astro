@@ -1,0 +1,71 @@
+---
+// src/components/blog/TableOfContents.astro
+export interface Props {
+    headings: { depth: number; slug: string; text: string }[];
+}
+
+const { headings } = Astro.props;
+
+const SKIP_HEADINGS = new Set(['table of contents', 'contents']);
+
+const tocHeadings = headings.filter(
+    (h) =>
+        h.depth === 2 &&
+        !SKIP_HEADINGS.has(h.text.trim().toLowerCase()),
+);
+---
+
+{tocHeadings.length > 0 && (
+    <nav class="toc" aria-label="Table of contents">
+        <h2 class="toc-title">Contents</h2>
+        <ol class="toc-list">
+            {tocHeadings.map((h) => (
+                <li class="toc-item">
+                    <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+            ))}
+        </ol>
+    </nav>
+)}
+
+<style>
+    .toc {
+        padding: var(--space-5);
+        background: var(--color-bg-secondary);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
+    }
+
+    .toc-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: var(--color-text-secondary);
+        margin: 0 0 var(--space-4);
+    }
+
+    .toc-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-2);
+        max-height: 70vh;
+        overflow-y: auto;
+    }
+
+    .toc-item a {
+        display: block;
+        color: var(--color-text-secondary);
+        text-decoration: none;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        transition: color var(--transition-fast);
+    }
+
+    .toc-item a:hover {
+        color: var(--color-primary);
+    }
+</style>
