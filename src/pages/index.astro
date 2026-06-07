@@ -4,6 +4,8 @@ import { getCollection } from 'astro:content';
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
 import TechStack from '../components/common/TechStack.astro';
 import GitHubStats from '../components/common/GitHubStats.astro';
+import { SITE, SOCIAL_LINKS } from '../config/site';
+import { formatDate } from '../utils/formatDate';
 
 // Get latest blog posts and projects
 const blogPosts = await getCollection('blog', ({ data }) => {
@@ -20,12 +22,26 @@ const latestBlogPosts = blogPosts
 const latestProjects = projects
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 4);
+
+const personSchema = {
+	'@context': 'https://schema.org',
+	'@type': 'Person',
+	name: SITE.name,
+	jobTitle: 'Backend Engineer',
+	url: SITE.url,
+	sameAs: [SOCIAL_LINKS.github, SOCIAL_LINKS.linkedin, SOCIAL_LINKS.twitter],
+	knowsAbout: ['Go', 'Distributed Systems', 'Event-Driven Architecture', 'AWS', 'Observability'],
+};
 ---
 
 <PortfolioLayout
-	title="Shoaib Hasan - Backend Architect & Distributed Systems Expert"
-	description="Backend Architect, Distributed Systems Expert, and Open Source Enthusiast. Award winner at International Blockchain Olympiad 2023. Building scalable microservices that power millions."
+	title="Shoaib Hasan - Backend Engineer · Go & Distributed Systems"
+	description="Backend Engineer with 4+ years building Go-first distributed systems — auth, billing, and observability at scale. 30K+ concurrent users on AWS."
+	isHome={true}
 >
+	<Fragment slot="head">
+		<script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+	</Fragment>
 	<!-- Hero Section -->
 	<section class="hero fade-in">
 		<div class="hero-content">
@@ -34,28 +50,28 @@ const latestProjects = projects
 			</div>
 			
 			<div class="hero-roles">
-				<span class="role-text" id="role-text">Backend Architect</span>
-				<span class="role-cursor">|</span>
+				<span class="role-text" id="role-text" aria-live="polite" aria-label="Backend Engineer">Backend Engineer</span>
+				<span class="role-cursor" aria-hidden="true">|</span>
 			</div>
 
-			<div class="hero-achievement-badge" role="status" aria-label="Achievement: IBCOL 2023 Award Winner, 6th Place International">
+			<div class="hero-achievement-badge" role="status" aria-label="Achievement: Excellence Award for Technical Brilliance, Placepoint 2025">
 				<span class="badge-icon" aria-hidden="true">🏆</span>
-				<span class="badge-text">IBCOL 2023 Award Winner (6th Place International)</span>
+				<span class="badge-text">Excellence Award for Technical Brilliance · Placepoint 2025</span>
 			</div>
 
 			<div class="hero-metrics">
 				<div class="metric-item">
-					<span class="metric-value">$200K+</span>
-					<span class="metric-label">Revenue Impact</span>
+					<span class="metric-value" data-prefix="$" data-value="500" data-suffix="K" data-decimals="0">$500K</span>
+					<span class="metric-label">Billing Revenue</span>
 				</div>
-				<div class="metric-divider">|</div>
+				<div class="metric-divider" aria-hidden="true">|</div>
 				<div class="metric-item">
-					<span class="metric-value">99.9%</span>
+					<span class="metric-value" data-value="99.9" data-suffix="%" data-decimals="1">99.9%</span>
 					<span class="metric-label">Uptime</span>
 				</div>
-				<div class="metric-divider">|</div>
+				<div class="metric-divider" aria-hidden="true">|</div>
 				<div class="metric-item">
-					<span class="metric-value">30K+</span>
+					<span class="metric-value" data-value="30" data-suffix="K+" data-decimals="0">30K+</span>
 					<span class="metric-label">Users</span>
 				</div>
 			</div>
@@ -66,8 +82,8 @@ const latestProjects = projects
 			</div>
 
 			<p class="hero-description">
-				Building scalable microservices that power millions. Passionate about distributed systems, 
-				cloud architecture, and blockchain technology.
+				Backend Engineer with 4+ years building Go-first distributed systems — auth, billing, and
+				observability at scale. Currently at Placepoint, serving 30K+ concurrent users on AWS.
 			</p>
 
 			<div class="hero-actions">
@@ -112,22 +128,30 @@ const latestProjects = projects
 		<h2 class="section-title">Achievements & Recognition</h2>
 		<div class="achievements-grid" role="list">
 			<div class="achievement-card" role="listitem" tabindex="0">
+				<div class="achievement-icon" aria-hidden="true">🌟</div>
+				<h3 class="achievement-title">Placepoint 2025</h3>
+				<p class="achievement-subtitle">Excellence Award</p>
+				<p class="achievement-description">Technical Brilliance</p>
+			</div>
+			<div class="achievement-card" role="listitem" tabindex="0">
 				<div class="achievement-icon" aria-hidden="true">🏆</div>
 				<h3 class="achievement-title">IBCOL 2023</h3>
 				<p class="achievement-subtitle">6th Place International</p>
-				<p class="achievement-description">Blockchain Olympiad<br>Amsterdam, Netherlands</p>
+				<p class="achievement-description">Blockchain Olympiad</p>
+				<p class="achievement-location">Amsterdam, Netherlands</p>
 			</div>
 			<div class="achievement-card" role="listitem" tabindex="0">
 				<div class="achievement-icon" aria-hidden="true">💰</div>
-				<h3 class="achievement-title">Revenue Impact</h3>
-				<p class="achievement-subtitle">$200K+ Platform Revenue</p>
-				<p class="achievement-description">Through Infrastructure<br>Improvements</p>
+				<h3 class="achievement-title">Billing Platform</h3>
+				<p class="achievement-subtitle">$500K Revenue</p>
+				<p class="achievement-description">Event-Driven Payment System</p>
 			</div>
 			<div class="achievement-card" role="listitem" tabindex="0">
 				<div class="achievement-icon" aria-hidden="true">⚡</div>
 				<h3 class="achievement-title">Performance Expert</h3>
 				<p class="achievement-subtitle">99.9% System Uptime</p>
-				<p class="achievement-description">30% Latency Reduction<br>Scalable Architecture</p>
+				<p class="achievement-description">30% Latency Reduction</p>
+				<p class="achievement-location">Scalable Architecture</p>
 			</div>
 		</div>
 	</section>
@@ -152,12 +176,8 @@ const latestProjects = projects
 				{latestBlogPosts.map((post) => (
 					<a href={`/blog/${post.slug}`} class="post-card">
 						<h3 class="post-title">{post.data.title}</h3>
-						<time class="post-date">
-							{post.data.publishDate.toLocaleDateString('en-US', {
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric'
-							})}
+						<time class="post-date" datetime={post.data.publishDate.toISOString()}>
+							{formatDate(post.data.publishDate)}
 						</time>
 						{post.data.description && (
 							<p class="post-description">{post.data.description}</p>
@@ -535,7 +555,7 @@ const latestProjects = projects
 
 	.achievements-grid {
 		display: grid;
-		grid-template-columns: repeat(3, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 		gap: var(--space-6);
 		margin-top: var(--space-8);
 	}
@@ -602,6 +622,14 @@ const latestProjects = projects
 		font-size: 0.875rem;
 		color: var(--color-text-secondary);
 		line-height: 1.6;
+		margin: 0;
+	}
+
+	.achievement-location {
+		font-size: 0.8125rem;
+		color: var(--color-text-secondary);
+		opacity: 0.85;
+		margin: var(--space-1) 0 0;
 	}
 
 	/* Content Sections */
@@ -901,9 +929,9 @@ const latestProjects = projects
 		if (!roleText) return;
 
 		const roles = [
-			'Backend Architect',
-			'Distributed Systems Expert',
-			'Open Source Enthusiast'
+			'Backend Engineer',
+			'Go & Distributed Systems',
+			'Event-Driven Architect'
 		];
 
 		let currentRoleIndex = 0;
@@ -940,38 +968,41 @@ const latestProjects = projects
 		setTimeout(typeRole, 1000);
 	}
 
-	// Number counter animation
-	function animateCounter(element: HTMLElement | null, target: number, suffix: string = '') {
-		if (!element) return;
+	// Number counter animation with proper prefix/suffix/decimal handling
+	function animateCounter(element: HTMLElement) {
+		const prefix = element.dataset.prefix || '';
+		const suffix = element.dataset.suffix || '';
+		const target = parseFloat(element.dataset.value || '0');
+		const decimals = parseInt(element.dataset.decimals || '0', 10);
 		const duration = 2000;
-		const start = 0;
-		const increment = target / (duration / 16);
-		let current = start;
+		const startTime = performance.now();
 
-		const updateCounter = () => {
-			current += increment;
-			if (current < target) {
-				element.textContent = Math.floor(current) + suffix;
-				requestAnimationFrame(updateCounter);
-			} else {
-				element.textContent = target + suffix;
+		const update = (now: number) => {
+			const elapsed = now - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			const current = target * progress;
+			element.textContent = prefix + current.toFixed(decimals) + suffix;
+			if (progress < 1) {
+				requestAnimationFrame(update);
 			}
 		};
 
-		// Start animation when element is in viewport
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				if (entry.isIntersecting) {
-					updateCounter();
-					observer.unobserve(entry.target);
-				}
-			});
-		}, { threshold: 0.5 });
-
-		observer.observe(element);
+		requestAnimationFrame(update);
 	}
 
-	// Scroll animations for sections
+	function initCounters() {
+		document.querySelectorAll('.metric-value[data-value]').forEach((metric) => {
+			const observer = new IntersectionObserver((entries) => {
+				entries.forEach(entry => {
+					if (entry.isIntersecting) {
+						animateCounter(entry.target as HTMLElement);
+						observer.unobserve(entry.target);
+					}
+				});
+			}, { threshold: 0.5 });
+			observer.observe(metric);
+		});
+	}
 	function initScrollAnimations() {
 		const observerOptions = {
 			threshold: 0.1,
@@ -993,21 +1024,7 @@ const latestProjects = projects
 		});
 	}
 
-	// Initialize number counters
-	function initCounters() {
-		const metricValues = document.querySelectorAll('.metric-value');
-		metricValues.forEach(metric => {
-			const text = metric.textContent || '';
-			const number = parseInt(text.replace(/[^0-9]/g, ''));
-			const suffix = text.replace(/[0-9]/g, '');
-			
-			if (number && !isNaN(number)) {
-				animateCounter(metric as HTMLElement | null, number, suffix);
-			}
-		});
-	}
-
-	// Initialize all functionality
+	// Scroll animations for sections
 	function initAll() {
 		initTypingAnimation();
 		initScrollAnimations();
