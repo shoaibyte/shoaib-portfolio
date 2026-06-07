@@ -2,10 +2,17 @@
 // src/components/layout/MobileMenuToggle.astro
 ---
 
-<button class="mobile-menu-toggle" id="mobile-menu-toggle">
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
-    <span class="hamburger-line"></span>
+<button
+    type="button"
+    class="mobile-menu-toggle"
+    id="mobile-menu-toggle"
+    aria-label="Toggle navigation menu"
+    aria-expanded="false"
+    aria-controls="sidebar-nav"
+>
+    <span class="hamburger-line" aria-hidden="true"></span>
+    <span class="hamburger-line" aria-hidden="true"></span>
+    <span class="hamburger-line" aria-hidden="true"></span>
 </button>
 
 <style>
