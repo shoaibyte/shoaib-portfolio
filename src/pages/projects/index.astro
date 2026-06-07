@@ -7,7 +7,13 @@ const projects = (await getCollection('projects'))
 ---
 
 <PortfolioLayout title="Projects" description="Things I've built and shipped.">
-    <section class="grid">
+    <section class="projects-page">
+        <header class="page-header">
+            <h1 class="page-title">Featured Projects</h1>
+            <p class="page-subtitle">Things I've built and open-sourced.</p>
+        </header>
+
+        <div class="grid">
         {projects.map(({ slug, data }) => (
                 <article class="card">
                     <a class="card-link" href={`/projects/${slug}/`}>
@@ -39,21 +45,39 @@ const projects = (await getCollection('projects'))
                                 )}
                             </div>
                             {data.publishDate && (
-                                <time class="project-date">
+                                <time class="project-date" datetime={data.publishDate.toISOString()}>
                                     {data.publishDate.toLocaleDateString('en-US', {
                                         year: 'numeric',
-                                        month: 'short'
-                                    })}
+                                        month: 'short',
+                                    }).replace(/\s+/g, ' ')}
                                 </time>
                             )}
                         </div>
                     </a>
                 </article>
         ))}
+        </div>
     </section>
 </PortfolioLayout>
 
 <style>
+    .page-header {
+        margin-bottom: var(--space-10);
+    }
+
+    .page-title {
+        font-size: 2.25rem;
+        font-weight: 800;
+        color: var(--color-text);
+        margin: 0 0 var(--space-2);
+    }
+
+    .page-subtitle {
+        font-size: 1rem;
+        color: var(--color-text-secondary);
+        margin: 0;
+    }
+
     .grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));

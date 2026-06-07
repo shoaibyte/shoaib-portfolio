@@ -13,28 +13,40 @@ Building secure APIs requires robust authentication mechanisms. In this guide, w
 
 ## 🏰 The Castle Analogy
 
-Think of your API as a **castle** with valuable treasures (user data, matches, etc.):
-
-- **Signup** = Creating a new citizen account
-- **Login** = Getting your daily entry pass (Access Token) + monthly pass (Refresh Token)
-- **Access Token** = 15-minute temporary badge to enter castle rooms
-- **Refresh Token** = 7-day voucher to get new temporary badges without re-login
-- **Logout** = Throwing away your passes (client-side)
+<div style="background: white; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color: #212529;">
+  <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🎯 Think of your API as a castle with valuable treasures:</strong>
+  </div>
+  <ul style="color: #212529; margin: 15px 0; padding-left: 20px;">
+    <li><strong>Signup</strong> = Creating a new citizen account</li>
+    <li><strong>Login</strong> = Getting your daily entry pass (Access Token) + monthly pass (Refresh Token)</li>
+    <li><strong>Access Token</strong> = 15-minute temporary badge to enter castle rooms</li>
+    <li><strong>Refresh Token</strong> = 7-day voucher to get new temporary badges without re-login</li>
+    <li><strong>Logout</strong> = Throwing away your passes (client-side)</li>
+  </ul>
+</div>
 
 ### Why Two Tokens?
 
-**Access Token (15 min):**
-
-- Short-lived for security
-- If stolen, attacker only has 15 minutes
-- Sent with every API request
-
-**Refresh Token (7 days):**
-
-- Long-lived for convenience
-- Used ONLY to get new access tokens
-- Stored securely (httpOnly cookie in production)
-- If stolen, attacker can't access API directly, only get new access tokens
+<div style="background: white; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color: #212529;">
+  <div style="background: #d4edda; border-left: 5px solid #28a745; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">⚡ Access Token (15 min):</strong>
+    <ul style="color: #212529; margin: 10px 0 0 20px;">
+      <li>Short-lived for security</li>
+      <li>If stolen, attacker only has 15 minutes</li>
+      <li>Sent with every API request</li>
+    </ul>
+  </div>
+  <div style="background: #d1ecf1; border-left: 5px solid #17a2b8; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🔄 Refresh Token (7 days):</strong>
+    <ul style="color: #212529; margin: 10px 0 0 20px;">
+      <li>Long-lived for convenience</li>
+      <li>Used ONLY to get new access tokens</li>
+      <li>Stored securely (httpOnly cookie in production)</li>
+      <li>If stolen, attacker can't access API directly, only get new access tokens</li>
+    </ul>
+  </div>
+</div>
 
 ## 📊 Sequence Diagrams
 
@@ -102,44 +114,50 @@ HMACSHA256(
 
 ## 🛡️ Security Measures in This Implementation
 
-### 1. Password Security
-
-```go
-// bcrypt with cost factor 12
+<div style="background: white; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color: #212529;">
+  <div style="background: #d4edda; border-left: 5px solid #28a745; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🔐 1. Password Security</strong>
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; overflow-x: auto; color: #212529;">
+      <code style="display: block; font-family: monospace; white-space: pre; font-size: 0.9em; line-height: 1.6;">{`// bcrypt with cost factor 12
 // Input: "SecurePass123!"
 // Output: "$2a$12$KIXxPz8vjT7lQ.zF3rF5h.BqV8..."
 // - Salt automatically generated (random per password)
 // - Computationally expensive (prevents brute force)
-// - One-way hash (can't reverse)
-```
+// - One-way hash (can't reverse)`}</code>
+    </div>
+    <p style="margin: 10px 0; color: #212529;"><strong>Why bcrypt cost 12?</strong></p>
+    <ul style="color: #212529; margin: 10px 0 0 20px;">
+      <li>Cost 10 = 77ms to hash</li>
+      <li>Cost 12 = 250ms to hash ✅ Sweet spot</li>
+      <li>Cost 14 = 1 second to hash</li>
+    </ul>
+    <p style="margin: 10px 0 0 0; color: #212529;">Higher cost = slower login BUT much harder to crack if database leaked.</p>
+  </div>
 
-**Why bcrypt cost 12?**
+  <div style="background: #d1ecf1; border-left: 5px solid #17a2b8; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">⏱️ 2. Token Expiry Strategy</strong>
+    <div style="margin: 10px 0;">
+      <p style="margin: 10px 0; color: #212529;"><strong>Access Token: 15 minutes</strong></p>
+      <ul style="color: #212529; margin: 5px 0 15px 20px;">
+        <li>Stolen token? Attacker has max 15 min</li>
+        <li>User stays logged in via refresh tokens</li>
+        <li>Sent with every request (higher exposure risk)</li>
+      </ul>
+      <p style="margin: 10px 0; color: #212529;"><strong>Refresh Token: 7 days</strong></p>
+      <ul style="color: #212529; margin: 5px 0 0 20px;">
+        <li>Used rarely (only to refresh)</li>
+        <li>Lower exposure risk</li>
+        <li>If stolen, attacker can keep generating access tokens</li>
+        <li>Should be stored in httpOnly cookie (future improvement)</li>
+      </ul>
+    </div>
+  </div>
 
-- Cost 10 = 77ms to hash
-- Cost 12 = 250ms to hash ✅ Sweet spot
-- Cost 14 = 1 second to hash
+  <div style="background: #fff3cd; border-left: 5px solid #ffc107; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">✅ 3. Token Validation</strong>
 
-Higher cost = slower login BUT much harder to crack if database leaked.
-
-### 2. Token Expiry Strategy
-
-**Access Token: 15 minutes**
-
-- Stolen token? Attacker has max 15 min
-- User stays logged in via refresh tokens
-- Sent with every request (higher exposure risk)
-
-**Refresh Token: 7 days**
-
-- Used rarely (only to refresh)
-- Lower exposure risk
-- If stolen, attacker can keep generating access tokens
-- Should be stored in httpOnly cookie (future improvement)
-
-### 3. Token Validation
-
-```go
-// Step 1: Parse token structure
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; overflow-x: auto; color: #212529;">
+      <code style="display: block; font-family: monospace; white-space: pre; font-size: 0.9em; line-height: 1.6;">{`// Step 1: Parse token structure
 token, err := jwt.ParseWithClaims(...)
 
 // Step 2: Verify signature (prevents tampering)
@@ -156,74 +174,84 @@ if errors.Is(err, jwt.ErrTokenExpired) {
 claims, ok := token.Claims.(*Claims)
 if !ok || !token.Valid {
     return ErrInvalidToken
-}
-```
+}`}</code>
+    </div>
+  </div>
 
-### 4. Dual Token Check on Refresh
-
-```go
-// Not just validating token...
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🔄 4. Dual Token Check on Refresh</strong>
+    <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 10px 0; overflow-x: auto; color: #212529;">
+      <code style="display: block; font-family: monospace; white-space: pre; font-size: 0.9em; line-height: 1.6;">{`// Not just validating token...
 // Also checking if user still active in DB
 user, err := s.userRepo.FindByID(ctx, claims.UserID)
 if !user.IsActive {
     return ErrUnauthorized  // User deactivated? No refresh!
-}
-```
+}`}</code>
+    </div>
+  </div>
+</div>
 
 ## 🚨 Attack Scenarios & Protections
 
-### Scenario 1: Database Leaked
+<div style="background: white; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color: #212529;">
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🚨 Scenario 1: Database Leaked</strong>
+    <p style="margin: 10px 0; color: #212529;"><strong>Attack:</strong> Hacker gets user table with password hashes</p>
+    <p style="margin: 10px 0; color: #212529;"><strong>Protection:</strong></p>
+    <ul style="color: #212529; margin: 5px 0 0 20px;">
+      <li>bcrypt hashes can't be reversed</li>
+      <li>Cracking one password takes hours/days</li>
+      <li>Each password has unique salt</li>
+    </ul>
+  </div>
 
-**Attack:** Hacker gets user table with password hashes
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🚨 Scenario 2: Access Token Stolen (XSS)</strong>
+    <p style="margin: 10px 0; color: #212529;"><strong>Attack:</strong> Malicious JS steals token from localStorage</p>
+    <p style="margin: 10px 0; color: #212529;"><strong>Protection:</strong></p>
+    <ul style="color: #212529; margin: 5px 0 0 20px;">
+      <li>Only valid for 15 minutes</li>
+      <li>After expiry, attacker is locked out</li>
+      <li>User can change password → invalidates refresh token</li>
+    </ul>
+  </div>
 
-**Protection:** 
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🚨 Scenario 3: Refresh Token Stolen</strong>
+    <p style="margin: 10px 0; color: #212529;"><strong>Attack:</strong> Attacker intercepts refresh token</p>
+    <p style="margin: 10px 0; color: #212529;"><strong>Protection (Current):</strong></p>
+    <ul style="color: #212529; margin: 5px 0 15px 20px;">
+      <li>Must know when to use it (only when access expires)</li>
+      <li>User can logout → delete their tokens client-side</li>
+    </ul>
+    <p style="margin: 10px 0; color: #212529;"><strong>Future Improvement:</strong></p>
+    <ul style="color: #212529; margin: 5px 0 0 20px;">
+      <li>Token rotation: New refresh token with each use</li>
+      <li>Token families: Detect if old refresh token reused</li>
+      <li>httpOnly cookies: JS can't access</li>
+    </ul>
+  </div>
 
-- bcrypt hashes can't be reversed
-- Cracking one password takes hours/days
-- Each password has unique salt
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🚨 Scenario 4: Man-in-the-Middle (MITM)</strong>
+    <p style="margin: 10px 0; color: #212529;"><strong>Attack:</strong> Intercept HTTP requests</p>
+    <p style="margin: 10px 0; color: #212529;"><strong>Protection:</strong></p>
+    <ul style="color: #212529; margin: 5px 0 0 20px;">
+      <li>HTTPS/TLS in production (Render auto-provides)</li>
+      <li>Tokens encrypted in transit</li>
+    </ul>
+  </div>
 
-### Scenario 2: Access Token Stolen (XSS)
-
-**Attack:** Malicious JS steals token from localStorage
-
-**Protection:**
-
-- Only valid for 15 minutes
-- After expiry, attacker is locked out
-- User can change password → invalidates refresh token
-
-### Scenario 3: Refresh Token Stolen
-
-**Attack:** Attacker intercepts refresh token
-
-**Protection (Current):**
-
-- Must know when to use it (only when access expires)
-- User can logout → delete their tokens client-side
-
-**Future Improvement:**
-
-- Token rotation: New refresh token with each use
-- Token families: Detect if old refresh token reused
-- httpOnly cookies: JS can't access
-
-### Scenario 4: Man-in-the-Middle (MITM)
-
-**Attack:** Intercept HTTP requests
-
-**Protection:**
-
-- HTTPS/TLS in production (Render auto-provides)
-- Tokens encrypted in transit
-
-### Scenario 5: Token Tampering
-
-**Attack:** Modify token payload (change user_id)
-
-**Protection:**
-
-- HMAC signature verification
-- Any change → signature invalid → rejected
+  <div style="background: #f8d7da; border-left: 5px solid #dc3545; padding: 15px; margin: 15px 0; border-radius: 10px; color: #212529;">
+    <strong style="color: #212529;">🚨 Scenario 5: Token Tampering</strong>
+    <p style="margin: 10px 0; color: #212529;"><strong>Attack:</strong> Modify token payload (change user_id)</p>
+    <p style="margin: 10px 0; color: #212529;"><strong>Protection:</strong></p>
+    <ul style="color: #212529; margin: 5px 0 0 20px;">
+      <li>HMAC signature verification</li>
+      <li>Any change → signature invalid → rejected</li>
+    </ul>
+  </div>
+</div>
 
 ## 🔄 Token Lifecycle
 
@@ -287,15 +315,18 @@ Day 8, 9:00 AM - Refresh token expired
 
 ## 🎯 Key Takeaways
 
-This implementation provides a **production-grade JWT authentication system** with:
-
-✅ **Short-lived access tokens** (15 min) for security  
-✅ **Long-lived refresh tokens** (7 days) for convenience  
-✅ **bcrypt password hashing** (cost 12) for protection  
-✅ **HMAC-SHA256 signatures** to prevent tampering  
-✅ **User status validation** on every refresh  
-✅ **Comprehensive error handling** for all edge cases  
-✅ **Context-based user injection** for clean handler code  
+<div style="background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%); border-left: 5px solid #28a745; border-radius: 20px; padding: 30px; margin: 20px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1); color: #212529;">
+  <h3 style="margin-top: 0; color: #212529;">This implementation provides a <strong>production-grade JWT authentication system</strong> with:</h3>
+  <ul style="color: #212529; margin: 15px 0; padding-left: 20px; line-height: 2;">
+    <li>✅ <strong>Short-lived access tokens</strong> (15 min) for security</li>
+    <li>✅ <strong>Long-lived refresh tokens</strong> (7 days) for convenience</li>
+    <li>✅ <strong>bcrypt password hashing</strong> (cost 12) for protection</li>
+    <li>✅ <strong>HMAC-SHA256 signatures</strong> to prevent tampering</li>
+    <li>✅ <strong>User status validation</strong> on every refresh</li>
+    <li>✅ <strong>Comprehensive error handling</strong> for all edge cases</li>
+    <li>✅ <strong>Context-based user injection</strong> for clean handler code</li>
+  </ul>
+</div>  
 
 ## 🔮 Future Enhancements
 

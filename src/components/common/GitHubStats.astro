@@ -1,6 +1,8 @@
 ---
 // src/components/common/GitHubStats.astro
-const githubUsername = 'sayanshoaib';
+import { SITE } from '../../config/site';
+
+const githubUsername = SITE.githubUsername;
 ---
 
 <section class="github-stats-section">
@@ -12,7 +14,11 @@ const githubUsername = 'sayanshoaib';
 				alt="GitHub Stats"
 				class="github-stat-image"
 				loading="lazy"
+				onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
 			/>
+			<div class="github-stat-fallback" style="display:none" aria-hidden="true">
+				<span>Stats unavailable</span>
+			</div>
 		</div>
 		<div class="github-stat-card">
 			<img
@@ -20,7 +26,11 @@ const githubUsername = 'sayanshoaib';
 				alt="Top Languages"
 				class="github-stat-image"
 				loading="lazy"
+				onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
 			/>
+			<div class="github-stat-fallback" style="display:none" aria-hidden="true">
+				<span>Languages unavailable</span>
+			</div>
 		</div>
 		<div class="github-stat-card">
 			<img
@@ -28,7 +38,11 @@ const githubUsername = 'sayanshoaib';
 				alt="GitHub Streak"
 				class="github-stat-image"
 				loading="lazy"
+				onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"
 			/>
+			<div class="github-stat-fallback" style="display:none" aria-hidden="true">
+				<span>Streak unavailable</span>
+			</div>
 		</div>
 	</div>
 </section>
@@ -52,6 +66,7 @@ const githubUsername = 'sayanshoaib';
 		padding: var(--space-4);
 		overflow: hidden;
 		transition: all var(--transition-fast);
+		min-height: 120px;
 	}
 
 	.github-stat-card:hover {
@@ -67,6 +82,14 @@ const githubUsername = 'sayanshoaib';
 		display: block;
 	}
 
+	.github-stat-fallback {
+		align-items: center;
+		justify-content: center;
+		min-height: 100px;
+		color: var(--color-text-secondary);
+		font-size: 0.875rem;
+	}
+
 	@media (max-width: 1024px) {
 		.github-stats-grid {
 			grid-template-columns: 1fr;
@@ -79,4 +102,3 @@ const githubUsername = 'sayanshoaib';
 		}
 	}
 </style>
-

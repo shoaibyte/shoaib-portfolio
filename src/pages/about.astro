@@ -1,21 +1,23 @@
 ---
 import PortfolioLayout from '../layouts/PortfolioLayout.astro';
+import { SOCIAL_LINKS, SITE } from '../config/site';
 ---
-<PortfolioLayout title="About" description="About Shoaib Hasan - Backend Architect, Distributed Systems Expert, and Open Source Enthusiast.">
+<PortfolioLayout title="About" description="About Shoaib Hasan — Backend Engineer specializing in Go, distributed systems, auth, billing, and observability at scale.">
     <article class="about-page">
         <!-- Introduction Section -->
         <section class="about-section">
             <h1>Hey, I'm Shoaib 👋</h1>
             <div class="intro-content">
                 <p class="intro-text">
-                    I'm <strong>Shoaib Hasan</strong>, a Software Engineer & Open Source Enthusiast from 
-                    <strong>Dhaka, Bangladesh 🇧🇩</strong>. I specialize in building scalable distributed systems 
-                    and cloud architectures that power millions of users.
+                    I'm <strong>Shoaib Hasan</strong>, a Backend Engineer from
+                    <strong>Dhaka, Bangladesh 🇧🇩</strong>. I build Go-first distributed systems with
+                    a focus on authentication, billing, and observability — currently serving 30K+
+                    concurrent users on AWS at Placepoint.
                 </p>
                 <p class="intro-text">
-                    Passionate about <strong>Distributed Systems</strong>, <strong>Cloud Architecture</strong>, 
-                    and <strong>Blockchain</strong> technology. I've been building scalable microservices since 2022, 
-                    focusing on performance, reliability, and scalability.
+                    With 4+ years of experience, I design event-driven microservices, REST and gRPC APIs,
+                    and production infrastructure on AWS ECS, Lambda, Docker, and Kubernetes. I also work
+                    with TypeScript/Node.js and integrate AI-assisted development tools into my workflow.
                 </p>
             </div>
         </section>
@@ -26,8 +28,39 @@ import PortfolioLayout from '../layouts/PortfolioLayout.astro';
             <div class="focus-card">
                 <div class="focus-icon">🎯</div>
                 <div class="focus-content">
-                    <h3>Building Scalable Microservices</h3>
-                    <p>Currently building distributed microservices that handle 30K+ users, real-time payment processing systems, and blockchain-based transparency solutions.</p>
+                    <h3>Backend Engineer at Placepoint</h3>
+                    <p>Building event-driven payment and billing systems with Kafka, PostgreSQL, and Redis. Leading auth, billing, and observability initiatives — including a billing platform that generated $500K in revenue.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Work Experience -->
+        <section class="about-section">
+            <h2>Work Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">💼</div>
+                    <div class="timeline-content">
+                        <h3>Backend Engineer — Placepoint</h3>
+                        <p class="timeline-date">Jun 2023 – Present · Dhaka</p>
+                        <p>Formerly PropCloud / Softwrd Ltd (acquired Dec 2024). Built event-driven payment platform, auth systems, and observability stack serving 30K+ users.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">💼</div>
+                    <div class="timeline-content">
+                        <h3>Software Engineer — Gorillamove</h3>
+                        <p class="timeline-date">Feb – May 2023</p>
+                        <p>Developed backend services and APIs for logistics platform operations.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker">💼</div>
+                    <div class="timeline-content">
+                        <h3>Junior Software Engineer — Poridhi</h3>
+                        <p class="timeline-date">Jul 2022 – Jan 2023</p>
+                        <p>Contributed to backend development and cloud infrastructure for early-stage products.</p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -37,28 +70,49 @@ import PortfolioLayout from '../layouts/PortfolioLayout.astro';
             <h2>Achievements & Recognition</h2>
             <div class="timeline">
                 <div class="timeline-item">
+                    <div class="timeline-marker">🌟</div>
+                    <div class="timeline-content">
+                        <h3>Excellence Award for Technical Brilliance</h3>
+                        <p class="timeline-date">2025 · Placepoint</p>
+                        <p>Recognized for outstanding technical contributions to the payment and billing platform</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
                     <div class="timeline-marker">🏆</div>
                     <div class="timeline-content">
-                        <h3>IBCOL 2023 - 6th Place International</h3>
-                        <p class="timeline-date">2023 • Amsterdam, Netherlands</p>
-                        <p>International Blockchain Olympiad - Award winner for innovative blockchain solution</p>
+                        <h3>IBCOL 2023 — 6th Place International</h3>
+                        <p class="timeline-date">2023 · Amsterdam, Netherlands</p>
+                        <p>International Blockchain Olympiad — award winner for innovative blockchain solution</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-marker">💰</div>
                     <div class="timeline-content">
-                        <h3>$200K+ Revenue Impact</h3>
-                        <p class="timeline-date">2023-2024</p>
-                        <p>Platform revenue generated through infrastructure improvements and optimizations</p>
+                        <h3>$500K Billing Platform Revenue</h3>
+                        <p class="timeline-date">2023–2025</p>
+                        <p>Event-driven payment platform generating significant revenue through infrastructure and product improvements</p>
                     </div>
                 </div>
                 <div class="timeline-item">
                     <div class="timeline-marker">⚡</div>
                     <div class="timeline-content">
-                        <h3>Performance Expert</h3>
+                        <h3>Performance & Reliability</h3>
                         <p class="timeline-date">Ongoing</p>
                         <p>99.9% system uptime, 30% latency reduction, scalable architecture design</p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section class="about-section">
+            <h2>Education</h2>
+            <div class="focus-card">
+                <div class="focus-icon">🎓</div>
+                <div class="focus-content">
+                    <h3>B.S. Computer Science & Engineering</h3>
+                    <p class="timeline-date">United International University · Jan 2019 – 2024</p>
+                    <p>Expected completion: June 2026</p>
                 </div>
             </div>
         </section>
@@ -70,31 +124,31 @@ import PortfolioLayout from '../layouts/PortfolioLayout.astro';
                 <div class="expertise-category">
                     <h3>Backend Development</h3>
                     <ul class="skill-list">
-                        <li>Java & Spring Framework</li>
-                        <li>Go (Golang)</li>
-                        <li>Python & FastAPI</li>
-                        <li>Microservices Architecture</li>
-                        <li>REST & GraphQL APIs</li>
+                        <li>Go (Golang) — primary</li>
+                        <li>TypeScript & Node.js</li>
+                        <li>Java & Python</li>
+                        <li>REST & gRPC APIs</li>
+                        <li>Auth, Billing & OpenAPI</li>
                     </ul>
                 </div>
                 <div class="expertise-category">
                     <h3>Infrastructure & DevOps</h3>
                     <ul class="skill-list">
-                        <li>AWS Cloud Services</li>
+                        <li>AWS ECS & Lambda</li>
                         <li>Docker & Kubernetes</li>
                         <li>Terraform</li>
-                        <li>CI/CD Pipelines</li>
-                        <li>Monitoring & Observability</li>
+                        <li>CI/CD & TDD</li>
+                        <li>Prometheus, Grafana & ELK</li>
                     </ul>
                 </div>
                 <div class="expertise-category">
-                    <h3>Databases & Data</h3>
+                    <h3>Data & Messaging</h3>
                     <ul class="skill-list">
-                        <li>PostgreSQL</li>
-                        <li>MongoDB</li>
-                        <li>Redis</li>
-                        <li>Kafka</li>
-                        <li>Data Modeling</li>
+                        <li>PostgreSQL & Redis</li>
+                        <li>MongoDB & Neo4j</li>
+                        <li>Kafka & RabbitMQ</li>
+                        <li>AWS SQS</li>
+                        <li>Event-Driven Architecture</li>
                     </ul>
                 </div>
             </div>
@@ -105,24 +159,24 @@ import PortfolioLayout from '../layouts/PortfolioLayout.astro';
             <h2>What I'm Building</h2>
             <div class="building-grid">
                 <div class="building-item">
-                    <div class="building-icon">🌐</div>
-                    <h3>Distributed Microservices</h3>
-                    <p>Handling 30K+ users with high availability and scalability</p>
-                </div>
-                <div class="building-item">
-                    <div class="building-icon">⚡</div>
-                    <h3>Real-time Payment Systems</h3>
-                    <p>Processing payments with low latency and high reliability</p>
+                    <div class="building-icon">💳</div>
+                    <h3>Event-Driven Payment Platform</h3>
+                    <p>Kafka-based billing system with $500K revenue impact at Placepoint</p>
                 </div>
                 <div class="building-item">
                     <div class="building-icon">🔐</div>
-                    <h3>Blockchain Solutions</h3>
-                    <p>Transparency and trust through decentralized systems</p>
+                    <h3>Auth & Billing Systems</h3>
+                    <p>Secure authentication and subscription billing for 30K+ users</p>
                 </div>
                 <div class="building-item">
                     <div class="building-icon">📊</div>
-                    <h3>Data Processing Pipelines</h3>
-                    <p>High-performance pipelines for real-time analytics</p>
+                    <h3>Observability Stack</h3>
+                    <p>Prometheus, Grafana, and ELK for production monitoring at scale</p>
+                </div>
+                <div class="building-item">
+                    <div class="building-icon">🤖</div>
+                    <h3>AI-Assisted Development</h3>
+                    <p>Integrating Claude Code, Cursor, and LLM tooling into engineering workflows</p>
                 </div>
             </div>
         </section>
@@ -131,32 +185,39 @@ import PortfolioLayout from '../layouts/PortfolioLayout.astro';
         <section class="about-section">
             <h2>Let's Connect & Collaborate</h2>
             <p class="connect-intro">
-                Open to collaborate on backend development, scalable microservices architecture, 
-                DevOps and cloud infrastructure, and decentralized applications (DApps).
+                Open to collaborate on backend development, event-driven architectures,
+                cloud infrastructure, and observability at scale.
             </p>
             <div class="connect-links">
-                <a href="mailto:shoaib.hasan1801@gmail.com" class="connect-link">
+                <a href={SOCIAL_LINKS.email} class="connect-link">
                     <span>📧</span>
                     <div>
                         <strong>Email</strong>
                         <span>shoaib.hasan1801@gmail.com</span>
                     </div>
                 </a>
-                <a href="https://www.linkedin.com/in/shoaib-hasan-568528210/" target="_blank" rel="noopener noreferrer" class="connect-link">
+                <a href={`tel:${SITE.phone.replace(/\s/g, '')}`} class="connect-link">
+                    <span>📱</span>
+                    <div>
+                        <strong>Phone</strong>
+                        <span>{SITE.phone}</span>
+                    </div>
+                </a>
+                <a href={SOCIAL_LINKS.linkedin} target="_blank" rel="noopener noreferrer" class="connect-link">
                     <span>💼</span>
                     <div>
                         <strong>LinkedIn</strong>
                         <span>Connect on LinkedIn</span>
                     </div>
                 </a>
-                <a href="https://shoaib-hasan1801.medium.com" target="_blank" rel="noopener noreferrer" class="connect-link">
+                <a href={SOCIAL_LINKS.medium} target="_blank" rel="noopener noreferrer" class="connect-link">
                     <span>✍️</span>
                     <div>
                         <strong>Medium</strong>
                         <span>Read my articles</span>
                     </div>
                 </a>
-                <a href="https://github.com/sayanshoaib" target="_blank" rel="noopener noreferrer" class="connect-link">
+                <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener noreferrer" class="connect-link">
                     <span>🐙</span>
                     <div>
                         <strong>GitHub</strong>

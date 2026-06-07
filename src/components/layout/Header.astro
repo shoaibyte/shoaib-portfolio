@@ -1,5 +1,6 @@
 ---
 // src/components/layout/Header.astro
+import { SOCIAL_LINKS } from '../../config/site';
 
 // Get current page for active navigation state
 const currentPath = Astro.url.pathname;
@@ -15,88 +16,96 @@ function isActive(path: string): boolean {
 <header class="header">
     <!-- Mobile Menu Toggle -->
     <div class="mobile-header">
-        <button class="mobile-menu-toggle" id="mobile-menu-toggle">
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
-            <span class="hamburger-line"></span>
+        <button
+            type="button"
+            class="mobile-menu-toggle"
+            id="mobile-menu-toggle"
+            aria-label="Toggle navigation menu"
+            aria-expanded="false"
+            aria-controls="sidebar-nav"
+        >
+            <span class="hamburger-line" aria-hidden="true"></span>
+            <span class="hamburger-line" aria-hidden="true"></span>
+            <span class="hamburger-line" aria-hidden="true"></span>
         </button>
         <a href="/" class="mobile-logo">Shoaib</a>
     </div>
 
     <div class="search-container">
-        <div class="search-wrapper">
+        <form role="search" aria-label="Search posts" class="search-wrapper" id="search-form">
             <input
-                    type="text"
-                    class="search-input"
-                    placeholder="Search posts..."
-                    id="search-input"
+                type="search"
+                class="search-input"
+                placeholder="Search posts..."
+                id="search-input"
+                aria-label="Search posts"
             >
-            <button class="search-btn" id="search-btn">Go</button>
-        </div>
+            <button type="submit" class="search-btn" id="search-btn" aria-label="Submit search">Go</button>
+        </form>
     </div>
 
-    <nav class="header-nav">
+    <nav class="header-nav" aria-label="Main navigation">
         {currentPath !== '/' && (
             <a
-                    href="/"
-                    class="nav-item home-button"
+                href="/"
+                class="nav-item home-button"
             >
-                <span>🏠</span>
+                <span aria-hidden="true">🏠</span>
                 Home
             </a>
         )}
         <a
-                href="/notes"
-                class={`nav-item ${isActive('/notes') ? 'active' : ''}`}
+            href="/notes"
+            class={`nav-item ${isActive('/notes') ? 'active' : ''}`}
         >
-            <span>📝</span>
+            <span aria-hidden="true">📝</span>
             Notes
         </a>
         <a
-                href="/blog"
-                class={`nav-item ${isActive('/blog') ? 'active' : ''}`}
+            href="/blog"
+            class={`nav-item ${isActive('/blog') ? 'active' : ''}`}
         >
-            <span>📰</span>
+            <span aria-hidden="true">📰</span>
             Blog
         </a>
         <a
-                href="/projects"
-                class={`nav-item ${isActive('/projects') ? 'active' : ''}`}
+            href="/projects"
+            class={`nav-item ${isActive('/projects') ? 'active' : ''}`}
         >
-            <span>🚀</span>
+            <span aria-hidden="true">🚀</span>
             Projects
         </a>
         <a
-                href="/about"
-                class={`nav-item ${isActive('/about') ? 'active' : ''}`}
+            href="/about"
+            class={`nav-item ${isActive('/about') ? 'active' : ''}`}
         >
-            <span>👤</span>
+            <span aria-hidden="true">👤</span>
             About
         </a>
 
         <!-- Theme Toggle -->
-        <button class="theme-toggle" id="theme-toggle">
-            <span id="theme-icon">☀️</span>
+        <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to light mode" title="Toggle colour theme">
+            <span id="theme-icon" aria-hidden="true">☀️</span>
         </button>
 
         <!-- Social Links -->
         <a
-                href="https://github.com/shoaibyte"
-                class="nav-item social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="GitHub"
+            href={SOCIAL_LINKS.github}
+            class="nav-item social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="GitHub"
         >
-            <span>🐙</span>
+            <span aria-hidden="true">🐙</span>
         </a>
         <a
-                href="https://x.com/ShoaibHasan1806"
-                class="nav-item social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Twitter"
+            href={SOCIAL_LINKS.twitter}
+            class="nav-item social-link"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Twitter"
         >
-            <span>🐦</span>
+            <span aria-hidden="true">🐦</span>
         </a>
     </nav>
 </header>
@@ -368,6 +377,7 @@ function isActive(path: string): boolean {
 <script>
     // Search functionality
     function initializeSearch() {
+        const searchForm = document.getElementById('search-form') as HTMLFormElement;
         const searchInput = document.getElementById('search-input') as HTMLInputElement;
         const searchBtn = document.getElementById('search-btn') as HTMLButtonElement;
 
@@ -376,12 +386,7 @@ function isActive(path: string): boolean {
         function performSearch() {
             const query = searchInput.value.trim();
             if (query) {
-                // For now, redirect to a search page or implement search logic
                 console.log('Searching for:', query);
-                // You can implement search functionality here
-                // window.location.href = `/search?q=${encodeURIComponent(query)}`;
-
-                // Simple client-side search feedback
                 searchBtn.textContent = 'Searching...';
                 setTimeout(() => {
                     searchBtn.textContent = 'Go';
@@ -390,21 +395,38 @@ function isActive(path: string): boolean {
             }
         }
 
-        // Search on button click
-        searchBtn.addEventListener('click', performSearch);
-
-        // Search on Enter key
-        searchInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                performSearch();
-            }
+        searchForm?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            performSearch();
         });
 
-        // Clear search on Escape
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 searchInput.value = '';
                 searchInput.blur();
+            }
+        });
+    }
+
+    // Mobile menu toggle
+    function initializeMobileMenu() {
+        const toggle = document.getElementById('mobile-menu-toggle') as HTMLButtonElement;
+        const sidebar = document.getElementById('sidebar-nav') as HTMLElement;
+
+        if (!toggle || !sidebar) return;
+
+        toggle.addEventListener('click', () => {
+            const isOpen = sidebar.classList.toggle('mobile-open');
+            toggle.classList.toggle('active', isOpen);
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+        });
+
+        document.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            if (!sidebar.contains(target) && !toggle.contains(target)) {
+                toggle.classList.remove('active');
+                sidebar.classList.remove('mobile-open');
+                toggle.setAttribute('aria-expanded', 'false');
             }
         });
     }
@@ -418,14 +440,14 @@ function isActive(path: string): boolean {
 
         function updateThemeIcon() {
             const currentTheme = document.documentElement.getAttribute('data-theme');
-            themeIcon.textContent = currentTheme === 'dark' ? '☀️' : '🌙';
+            const isDark = currentTheme === 'dark';
+            themeIcon.textContent = isDark ? '☀️' : '🌙';
+            themeToggle.setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
         }
 
-        // Set initial icon
         updateThemeIcon();
 
         themeToggle.addEventListener('click', () => {
-            // Call the global toggleTheme function from Layout.astro
             if (typeof (window as any).toggleTheme === 'function') {
                 (window as any).toggleTheme();
                 updateThemeIcon();
@@ -443,10 +465,8 @@ function isActive(path: string): boolean {
             const href = link.getAttribute('href');
 
             if (href) {
-                // Remove existing active class
                 link.classList.remove('active');
 
-                // Add active class based on current path
                 if (href === '/' && currentPath === '/') {
                     link.classList.add('active');
                 } else if (href !== '/' && currentPath.startsWith(href)) {
@@ -456,16 +476,16 @@ function isActive(path: string): boolean {
         });
     }
 
-    // Initialize all functionality when DOM is loaded
     document.addEventListener('DOMContentLoaded', () => {
         initializeSearch();
+        initializeMobileMenu();
         initializeThemeToggle();
         initializeNavigation();
     });
 
-    // Re-initialize theme icon on theme change
     document.addEventListener('astro:page-load', () => {
         initializeSearch();
+        initializeMobileMenu();
         initializeThemeToggle();
         initializeNavigation();
     });

@@ -1,0 +1,39 @@
+---
+title: "Event-Driven Payment Platform"
+description: "Kafka-based billing and payment platform at Placepoint serving 30K+ users, generating $500K in revenue with auth, observability, and AWS infrastructure."
+publishDate: 2025-01-15
+tags: ["go", "kafka", "postgresql", "redis", "aws", "billing", "distributed-systems"]
+featured: true
+status: "in-progress"
+---
+
+# Event-Driven Payment Platform
+
+Production billing and payment platform built at Placepoint (formerly PropCloud / Softwrd Ltd) — an event-driven system serving 30K+ concurrent users and generating $500K in revenue.
+
+## Overview
+
+Designed and built the core backend for subscription billing, payment processing, and user authentication. The platform runs on AWS with Go microservices, Kafka for event streaming, and a full observability stack.
+
+## Key Contributions
+
+- **Event-Driven Architecture**: Kafka-based payment flows with idempotent consumers and dead-letter handling
+- **Auth & Billing**: JWT-based authentication, subscription management, and payment gateway integration
+- **Observability**: Prometheus metrics, Grafana dashboards, and ELK logging for production monitoring
+- **Infrastructure**: AWS ECS, Lambda, Docker, Terraform, and CI/CD pipelines
+- **Performance**: 99.9% uptime, 30% latency reduction through caching and query optimization
+
+## Tech Stack
+
+- **Backend**: Go (primary), TypeScript/Node.js
+- **Messaging**: Kafka, RabbitMQ, AWS SQS
+- **Databases**: PostgreSQL, Redis, MongoDB
+- **Cloud**: AWS ECS, Lambda, Docker, Kubernetes, Terraform
+- **Observability**: Prometheus, Grafana, ELK
+- **APIs**: REST, gRPC, OpenAPI
+
+## Impact
+
+- $500K revenue generated through the billing platform
+- 30K+ concurrent users served on AWS
+- Excellence Award for Technical Brilliance (Placepoint, 2025)
